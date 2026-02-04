@@ -10,7 +10,7 @@ COPY FoodFrenzy-main/src ./src
 RUN mvn clean package -DskipTests
 
 # Run the app
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
