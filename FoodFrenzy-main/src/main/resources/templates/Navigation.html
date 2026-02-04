@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home : Pavan Tea</title>
+    <link rel="stylesheet" href="" th:href="@{/css/Navigation.css}" />
+    <link rel="stylesheet" href="" th:href="@{/css/Home.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav th:fragment="navbar()" class="navbar">
+      <a href="/home" class="logo"> 🍕 FoodFrenzy </a>
+      <ul>
+        <li>
+          <a
+            th:href="@{/home}"
+            th:class="${activePage == 'home' ? 'active' : ''}"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            th:href="@{/products}"
+            th:class="${activePage == 'products' ? 'active' : ''}"
+            >Products</a
+          >
+        </li>
+        <li>
+          <a
+            th:href="@{/location}"
+            th:class="${activePage == 'location' ? 'active' : ''}"
+            >Locate Us</a
+          >
+        </li>
+        <li>
+          <a
+            th:href="@{/about}"
+            th:class="${activePage == 'about' ? 'active' : ''}"
+            >About Us</a
+          >
+        </li>
+        <!-- Check if user is logged in to toggle Login/Profile link effectively -->
+        <li th:if="${session.loggedInUser == null}">
+          <a th:href="@{/login}" class="btn-login">Log In</a>
+        </li>
+        <li th:if="${session.loggedInUser != null}">
+          <a th:href="@{/profile}" class="btn-login">Profile</a>
+        </li>
+      </ul>
+    </nav>
+  </body>
+</html>

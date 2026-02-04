@@ -1,0 +1,307 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodFrenzy - Admin Panel</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div class="container animate-fade">
+      <div class="dashboard-header">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p class="text-muted">
+            Manage your users, products, and platform metrics.
+          </p>
+        </div>
+        <div>
+          <a th:href="@{/home}" class="btn secondary small"
+            ><i class="fa-solid fa-house"></i> View Site</a
+          >
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="admin-stats">
+        <div class="stat-card">
+          <div
+            class="feature-icon"
+            style="font-size: 2rem; padding: 0.8rem; margin-bottom: 0"
+          >
+            👥
+          </div>
+          <span
+            class="stat-number"
+            th:text="${users != null ? users.size() : 0}"
+            >0</span
+          >
+          <p class="text-muted">Total Users</p>
+        </div>
+        <div class="stat-card">
+          <div
+            class="feature-icon"
+            style="font-size: 2rem; padding: 0.8rem; margin-bottom: 0"
+          >
+            🍔
+          </div>
+          <span
+            class="stat-number"
+            th:text="${products != null ? products.size() : 0}"
+            >0</span
+          >
+          <p class="text-muted">Total Products</p>
+        </div>
+        <div class="stat-card">
+          <div
+            class="feature-icon"
+            style="font-size: 2rem; padding: 0.8rem; margin-bottom: 0"
+          >
+            📦
+          </div>
+          <span class="stat-number">0</span>
+          <p class="text-muted">Total Orders</p>
+        </div>
+        <div class="stat-card">
+          <div
+            class="feature-icon"
+            style="font-size: 2rem; padding: 0.8rem; margin-bottom: 0"
+          >
+            🛡️
+          </div>
+          <span
+            class="stat-number"
+            th:text="${admins != null ? admins.size() : 0}"
+            >0</span
+          >
+          <p class="text-muted">Total Admins</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card mb-3 p-3">
+        <h3 class="mb-2">⚡ Quick Actions</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap">
+          <a th:href="@{/admin/addAdmin}" class="btn btn-primary"
+            ><i class="fa-solid fa-user-shield"></i> Add Admin</a
+          >
+          <a th:href="@{/admin/addProduct}" class="btn btn-primary"
+            ><i class="fa-solid fa-burger"></i> Add Product</a
+          >
+          <a th:href="@{/admin/addUser}" class="btn btn-primary"
+            ><i class="fa-solid fa-user-plus"></i> Add User</a
+          >
+        </div>
+      </div>
+
+      <div class="admin-sections">
+        <!-- Users Section -->
+        <section class="mb-3">
+          <div class="card p-0">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #eee">
+              <h2 style="margin: 0; font-size: 1.5rem">User Management</h2>
+            </div>
+            <div class="table-container" style="box-shadow: none">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="user : ${users}">
+                    <td th:text="${user.userId}">#</td>
+                    <td th:text="${user.userName}">Name</td>
+                    <td th:text="${user.userEmail}">Email</td>
+                    <td th:text="${user.userPhoneNumber}">Phone</td>
+                    <td>
+                      <a
+                        th:href="@{/admin/updateUser/{userId}(userId=${user.userId})}"
+                        class="btn small secondary"
+                        style="padding: 0.4rem 0.8rem; font-size: 0.8rem"
+                      >
+                        <i class="fa-solid fa-pen"></i>
+                      </a>
+                      <a
+                        th:href="@{/user/deleteUser/{id}(id=${user.userId})}"
+                        class="btn small"
+                        style="
+                          background: var(--danger);
+                          color: white;
+                          padding: 0.4rem 0.8rem;
+                          font-size: 0.8rem;
+                        "
+                      >
+                        <i class="fa-solid fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                th:if="${users == null or users.isEmpty()}"
+                class="p-3 text-center text-muted"
+              >
+                No users found.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="mb-3">
+          <div class="card p-0">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #eee">
+              <h2 style="margin: 0; font-size: 1.5rem">Product Management</h2>
+            </div>
+            <div class="table-container" style="box-shadow: none">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="product : ${products}">
+                    <td th:text="${product.productId}">#</td>
+                    <td th:text="${product.productName}">Name</td>
+                    <td style="color: var(--primary); font-weight: bold">
+                      ₹<span th:text="${product.productPrice}">0</span>
+                    </td>
+                    <td th:text="${product.productQuantity}">10</td>
+                    <td
+                      th:text="${product.productDescription}"
+                      style="
+                        max-width: 200px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      "
+                    >
+                      Desc
+                    </td>
+                    <td>
+                      <a
+                        th:href="@{/admin/updateProduct/{productId}(productId=${product.productId})}"
+                        class="btn small secondary"
+                        style="padding: 0.4rem 0.8rem; font-size: 0.8rem"
+                      >
+                        <i class="fa-solid fa-pen"></i>
+                      </a>
+                      <a
+                        th:href="@{/deleteProduct/{productId}(productId=${product.productId})}"
+                        class="btn small"
+                        style="
+                          background: var(--danger);
+                          color: white;
+                          padding: 0.4rem 0.8rem;
+                          font-size: 0.8rem;
+                        "
+                      >
+                        <i class="fa-solid fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                th:if="${products == null or products.isEmpty()}"
+                class="p-3 text-center text-muted"
+              >
+                No products found.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Admins Section -->
+        <section class="mb-3">
+          <div class="card p-0">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #eee">
+              <h2 style="margin: 0; font-size: 1.5rem">Admin Management</h2>
+            </div>
+            <div class="table-container" style="box-shadow: none">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="admin : ${admins}">
+                    <td th:text="${admin.adminId}">#</td>
+                    <td th:text="${admin.adminName}">Name</td>
+                    <td th:text="${admin.adminEmail}">Email</td>
+                    <td th:text="${admin.adminPhoneNumber}">Phone</td>
+                    <td>
+                      <a
+                        th:href="@{/admin/updateAdmin/{adminId}(adminId=${admin.adminId})}"
+                        class="btn small secondary"
+                        style="padding: 0.4rem 0.8rem; font-size: 0.8rem"
+                      >
+                        <i class="fa-solid fa-pen"></i>
+                      </a>
+                      <a
+                        th:href="@{/admin/deleteAdmin/{id}(id=${admin.adminId})}"
+                        class="btn small"
+                        style="
+                          background: var(--danger);
+                          color: white;
+                          padding: 0.4rem 0.8rem;
+                          font-size: 0.8rem;
+                        "
+                      >
+                        <i class="fa-solid fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                th:if="${admins == null or admins.isEmpty()}"
+                class="p-3 text-center text-muted"
+              >
+                No admins found.
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer class="mt-3">
+      <p>
+        &copy; 2026 FoodFrenzy. Made with
+        <span style="color: var(--primary)">❤️</span> for foodies.
+      </p>
+    </footer>
+  </body>
+</html>

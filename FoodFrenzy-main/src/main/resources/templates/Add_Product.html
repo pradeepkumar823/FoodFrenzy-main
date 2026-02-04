@@ -1,0 +1,98 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Product - FoodFrenzy</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div class="container animate-fade">
+      <div class="card" style="max-width: 700px; margin: 0 auto">
+        <h1 class="text-center mb-2">Add New Product</h1>
+
+        <form th:action="@{/product/addingProduct}" method="post">
+          <div class="form-group">
+            <label>Product Name</label>
+            <input
+              type="text"
+              name="productName"
+              required
+              placeholder="e.g. Margherita Pizza"
+            />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+            <div class="form-group">
+              <label>Price (₹)</label>
+              <input
+                type="number"
+                name="productPrice"
+                step="0.01"
+                min="0"
+                required
+                placeholder="299"
+              />
+            </div>
+            <div class="form-group">
+              <label>Quantity</label>
+              <input
+                type="number"
+                name="productQuantity"
+                min="0"
+                required
+                placeholder="10"
+              />
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select name="category">
+                <option value="all">Select Category</option>
+                <option value="Fruit">Fruit</option>
+                <option value="Veg">Vegetable</option>
+                <option value="Chicken">Chicken</option>
+                <option value="pizza">Pizza</option>
+                <option value="burger">Burger</option>
+                <option value="pasta">Pasta</option>
+                <option value="salad">Salad</option>
+                <option value="drink">Drink</option>
+                <option value="dessert">Dessert</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea
+              name="productDescription"
+              rows="3"
+              placeholder="Brief and tasty description..."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Image URL (Optional)</label>
+            <input type="url" name="imageUrl" placeholder="https://..." />
+          </div>
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary" style="width: 100%">
+              Add Product
+            </button>
+            <div class="text-center mt-1">
+              <a th:href="@{/admin/services}" class="btn secondary small"
+                >Cancel</a
+              >
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

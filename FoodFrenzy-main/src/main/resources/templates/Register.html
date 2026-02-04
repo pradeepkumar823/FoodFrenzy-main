@@ -1,0 +1,194 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodFrenzy - Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <script>
+      function toggleFields() {
+        var role = document.getElementById("role").value;
+        var adminFields = document.getElementById("adminFields");
+        var userFields = document.getElementById("userFields");
+
+        if (role === "ADMIN") {
+          adminFields.style.display = "block";
+          userFields.style.display = "none";
+
+          document.querySelectorAll("#adminFields input").forEach((i) => {
+            i.disabled = false;
+            i.required = true;
+          });
+          document
+            .querySelectorAll("#userFields input, #userFields textarea")
+            .forEach((i) => {
+              i.disabled = true;
+              i.required = false;
+            });
+        } else {
+          adminFields.style.display = "none";
+          userFields.style.display = "block";
+
+          document
+            .querySelectorAll("#userFields input, #userFields textarea")
+            .forEach((i) => {
+              i.disabled = false;
+              i.required = true;
+            });
+          document.querySelectorAll("#adminFields input").forEach((i) => {
+            i.disabled = true;
+            i.required = false;
+          });
+        }
+      }
+    </script>
+  </head>
+  <body onload="toggleFields()">
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div class="auth-container animate-fade">
+      <div class="auth-card" style="max-width: 600px">
+        <h2 class="text-center mb-2">Create Account</h2>
+
+        <form th:action="@{/register}" method="post">
+          <div th:if="${error}" class="message error" th:text="${error}"></div>
+          <div
+            th:if="${success}"
+            class="message success"
+            th:text="${success}"
+          ></div>
+
+          <div class="form-group">
+            <label>I want to register as:</label>
+            <select name="role" id="role" onchange="toggleFields()" required>
+              <option value="USER">Customer</option>
+              <option value="ADMIN">Administrator</option>
+            </select>
+          </div>
+
+          <!-- User Fields -->
+          <div id="userFields">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                name="name"
+                id="userName"
+                placeholder="John Doe"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address</label>
+              <input
+                type="email"
+                name="email"
+                id="userEmail"
+                placeholder="name@example.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                id="userPassword"
+                placeholder="Create a strong password"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input
+                type="text"
+                name="phoneNumber"
+                id="userPhone"
+                placeholder="+91 98765 43210"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Delivery Address</label>
+              <textarea
+                name="address"
+                id="userAddress"
+                rows="3"
+                placeholder="Enter your full address"
+                style="resize: vertical"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Admin Fields -->
+          <div id="adminFields" style="display: none">
+            <div class="form-group">
+              <label>Admin Name</label>
+              <input
+                type="text"
+                name="name"
+                id="adminName"
+                placeholder="Admin Name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Work Email</label>
+              <input
+                type="email"
+                name="email"
+                id="adminEmail"
+                placeholder="admin@company.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                id="adminPassword"
+                placeholder="Secure Password"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Contact Number</label>
+              <input
+                type="text"
+                name="phoneNumber"
+                id="adminPhone"
+                placeholder="Official Contact Number"
+              />
+            </div>
+          </div>
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary" style="width: 100%">
+              Sign Up
+            </button>
+          </div>
+
+          <div class="text-center mt-2">
+            <p class="text-muted">
+              Already have an account?
+              <a
+                th:href="@{/login}"
+                style="color: var(--primary); font-weight: 600"
+                >Login Here</a
+              >
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

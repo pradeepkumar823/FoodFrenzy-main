@@ -1,0 +1,81 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodFrenzy - Order Success</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div
+      class="container animate-fade"
+      style="
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div class="card text-center" style="max-width: 500px; padding: 3rem">
+        <div
+          style="
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          "
+        >
+          🎉
+        </div>
+        <h1 style="color: var(--success); border: none">Order Successful!</h1>
+        <p class="text-muted mb-2">
+          Thank you for your order. Your food is being prepared with love.
+        </p>
+
+        <div class="p-2 bg-light border rounded mb-3" style="text-align: left">
+          <h3 class="mb-1" style="font-size: 1.2rem">Order Summary</h3>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 0.5rem;
+            "
+          >
+            <span>Total Amount:</span>
+            <strong style="color: var(--primary)"
+              >₹<span th:text="${amount}">0.00</span></strong
+            >
+          </div>
+          <div style="display: flex; justify-content: space-between">
+            <span>Est. Delivery:</span>
+            <strong>~30 mins</strong>
+          </div>
+        </div>
+
+        <div style="display: grid; gap: 1rem">
+          <a th:href="@{/products}" class="btn btn-primary">Order More</a>
+          <a th:href="@{/home}" class="btn secondary">Go to Home</a>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      @keyframes pop {
+        0% {
+          transform: scale(0);
+        }
+        80% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </body>
+</html>

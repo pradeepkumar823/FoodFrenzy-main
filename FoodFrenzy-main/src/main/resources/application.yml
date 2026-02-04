@@ -1,0 +1,48 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: food-frenzy
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/foodfrenzy_db?useSSL=false&serverTimezone=UTC}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:MySQL@76310}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  thymeleaf:
+    cache: false
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME:pksingh76311@gmail.com}
+    password: ${EMAIL_PASSWORD:tokaxywkkahfaojc}
+    properties:
+      mail:
+        smtp: 
+          auth: true
+          starttls:
+            enable: true
+
+# Microservice URLs (use consistent naming)
+services:
+  admin: http://localhost:8082
+  user: http://localhost:8083
+  product: http://localhost:8084
+  order: http://localhost:8085
+
+logging:
+  level:
+    root: info
+    org.springframework.web: debug
+    org.hibernate.SQL: debug

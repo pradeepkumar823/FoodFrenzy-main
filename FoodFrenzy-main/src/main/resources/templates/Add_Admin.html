@@ -1,0 +1,86 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Admin - FoodFrenzy</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div class="container animate-fade">
+      <div class="card" style="max-width: 600px; margin: 0 auto">
+        <h1 class="text-center mb-2">Add New Admin</h1>
+
+        <div
+          th:if="${success}"
+          class="message success"
+          th:text="${success}"
+        ></div>
+        <div th:if="${error}" class="message error" th:text="${error}"></div>
+
+        <form th:action="@{/admin/addingAdmin}" method="post">
+          <div class="form-group">
+            <label>Admin Name</label>
+            <input
+              type="text"
+              name="adminName"
+              required
+              placeholder="Enter admin name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              name="adminEmail"
+              required
+              placeholder="Enter email address"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="adminPassword"
+              required
+              placeholder="Enter password"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              name="adminPhoneNumber"
+              required
+              placeholder="Enter phone number"
+            />
+          </div>
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary" style="width: 100%">
+              Add Admin
+            </button>
+            <div class="text-center mt-1">
+              <a th:href="@{/admin/services}" class="btn secondary small"
+                >Cancel</a
+              >
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="text-center mt-3 text-muted">
+        <p>Admins have full access to manage users and products.</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodFrenzy - Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Navigation Fragment -->
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <!-- Hero Section -->
+    <header class="hero animate-fade">
+      <div class="container">
+        <h1 th:if="${user != null}">
+          Welcome back,
+          <span
+            th:text="${role == 'ADMIN' ? user.getAdminName() : user.getUserName()}"
+            >User</span
+          >!
+        </h1>
+        <h1 th:unless="${user != null}">Craving Something Delicious?</h1>
+
+        <p th:if="${user != null}">
+          Ready for another feast? Explore our latest menu additions.
+        </p>
+        <p th:unless="${user != null}">
+          Experience the best food delivery service in town. Fresh, fast, and
+          delivered right to your doorstep.
+        </p>
+
+        <div class="mt-2">
+          <a th:href="@{/products}" class="btn btn-primary">
+            <i class="fa-solid fa-utensils"></i> Order Now
+          </a>
+          <a
+            th:href="@{/about}"
+            class="btn secondary"
+            style="margin-left: 1rem; background: rgba(255, 255, 255, 0.2)"
+          >
+            Learn More
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container text-center mb-3">
+      <h2>Why FoodFrenzy?</h2>
+      <p class="text-muted">We deliver more than just food.</p>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h3>Super Fast Delivery</h3>
+        <p class="text-muted">
+          Hungry? Don't wait! We deliver your favorite meals hot and fresh
+          within 30 minutes.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🥗</div>
+        <h3>Fresh Ingredients</h3>
+        <p class="text-muted">
+          We use only the finest, locally sourced ingredients to ensure every
+          bite is healthy and delicious.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>Best Offers</h3>
+        <p class="text-muted">
+          Enjoy premium quality food at unbeatable prices with our daily deals
+          and exclusive discounts.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        &copy; 2026 FoodFrenzy. Made with
+        <span style="color: var(--primary)">❤️</span> for foodies.
+      </p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Product - FoodFrenzy</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div class="container animate-fade">
+      <div class="card" style="max-width: 700px; margin: 0 auto">
+        <h1 class="text-center mb-1">Update Product</h1>
+        <p class="text-center text-muted mb-2">
+          ID: <span th:text="${productId}">#</span>
+        </p>
+
+        <form
+          th:action="@{/updatingProduct/{productId}(productId=${productId})}"
+          method="get"
+        >
+          <input type="hidden" name="productId" th:value="${productId}" />
+
+          <div class="form-group">
+            <label>Product Name</label>
+            <input
+              type="text"
+              name="productName"
+              required
+              placeholder="Enter product name"
+            />
+          </div>
+
+          <!-- Note: Since this is a GET form with parameters mapping, I'm keeping inputs simple. 
+                 Ideally, pre-filling values would be better but the current template implies logic 
+                 where controller might handle binding differently or user has to re-enter. 
+                 Assuming standard binding: -->
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+            <div class="form-group">
+              <label>Price (₹)</label>
+              <input
+                type="number"
+                name="productPrice"
+                step="0.01"
+                min="0"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Quantity</label>
+              <input type="number" name="productQuantity" min="0" required />
+            </div>
+            <div class="form-group">
+              <label>Availability</label>
+              <select name="available">
+                <option value="true">Available</option>
+                <option value="false">Out of Stock</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea name="productDescription" rows="3"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Category</label>
+            <select name="category">
+              <option value="all">Select Category</option>
+              <option value="Fruit">Fruit</option>
+              <option value="Veg">Vegetable</option>
+              <option value="Chicken">Chicken</option>
+              <option value="pizza">Pizza</option>
+              <option value="burger">Burger</option>
+              <option value="pasta">Pasta</option>
+              <option value="salad">Salad</option>
+              <option value="drink">Drink</option>
+              <option value="dessert">Dessert</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Image URL</label>
+            <input type="url" name="imageUrl" />
+          </div>
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary" style="width: 100%">
+              Update Product
+            </button>
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                margin-top: 1rem;
+              "
+            >
+              <a th:href="@{/admin/services}" class="btn secondary small"
+                >Cancel</a
+              >
+              <a
+                th:href="@{/products/delete/{id}(id=${productId})}"
+                class="btn small"
+                style="background: var(--danger); color: white"
+                >Delete</a
+              >
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

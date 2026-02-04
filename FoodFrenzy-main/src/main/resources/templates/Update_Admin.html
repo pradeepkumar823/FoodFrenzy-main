@@ -1,0 +1,102 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Admin - FoodFrenzy</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div class="container animate-fade">
+      <div class="card" style="max-width: 600px; margin: 0 auto">
+        <h1 class="text-center mb-1">Update Admin</h1>
+        <p class="text-center text-muted mb-2">
+          ID: <span th:text="${admin.adminId}">#</span>
+        </p>
+
+        <div
+          th:if="${success}"
+          class="message success"
+          th:text="${success}"
+        ></div>
+        <div th:if="${error}" class="message error" th:text="${error}"></div>
+
+        <form
+          th:action="@{/admin/updatingAdmin/{id}(id=${admin.adminId})}"
+          method="post"
+        >
+          <div class="form-group">
+            <label>Admin Name</label>
+            <input
+              type="text"
+              name="adminName"
+              th:value="${admin.adminName}"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              name="adminEmail"
+              th:value="${admin.adminEmail}"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label
+              >New Password <small class="text-muted">(Optional)</small></label
+            >
+            <input
+              type="text"
+              name="adminPassword"
+              placeholder="Leave blank to keep current"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              name="adminPhoneNumber"
+              th:value="${admin.adminPhoneNumber}"
+              required
+            />
+          </div>
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary" style="width: 100%">
+              Save Changes
+            </button>
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                margin-top: 1rem;
+              "
+            >
+              <a th:href="@{/admin/services}" class="btn secondary small"
+                >Cancel</a
+              >
+              <a
+                th:href="@{/admin/deleteAdmin/{id}(id=${admin.adminId})}"
+                class="btn small"
+                style="background: var(--danger); color: white"
+                >Delete Admin</a
+              >
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

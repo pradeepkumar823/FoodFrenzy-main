@@ -1,0 +1,314 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Locate Us - FoodFrenzy</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      .map-frame {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        border: 4px solid white;
+        height: 450px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div class="container animate-fade">
+      <div class="text-center mb-3">
+        <h1>Find FoodFrenzy Near You</h1>
+        <p class="text-muted">
+          We're expanding! Find our restaurants and delivery zones below.
+        </p>
+      </div>
+
+      <!-- Map Search & Section -->
+      <div class="card mb-3">
+        <div
+          style="
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <div style="flex: 1; display: flex; gap: 0.5rem; min-width: 300px">
+            <input
+              type="text"
+              id="addressInput"
+              placeholder="Enter address or PIN code (e.g., Mumbai 400001)"
+            />
+            <button
+              id="searchAddressBtn"
+              class="btn btn-primary"
+              style="padding: 0.9rem 1.5rem"
+            >
+              🔍
+            </button>
+          </div>
+          <button id="getLocationBtn" class="btn secondary">
+            📍 Use My Location
+          </button>
+        </div>
+
+        <div class="map-frame">
+          <iframe
+            id="googleMap"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15282225.79979123!2d73.7250245393691!3d20.75030130833621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1706981234567!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+
+      <script>
+        const mapFrame = document.getElementById("googleMap");
+
+        // Address/PIN Search
+        document
+          .getElementById("searchAddressBtn")
+          .addEventListener("click", function () {
+            const address = document.getElementById("addressInput").value;
+            if (address.trim() !== "") {
+              mapFrame.src = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&z=15&output=embed`;
+            } else {
+              alert("Please enter an address or PIN code.");
+            }
+          });
+
+        // Enter key to search
+        document
+          .getElementById("addressInput")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              document.getElementById("searchAddressBtn").click();
+            }
+          });
+
+        // Live Location
+        document
+          .getElementById("getLocationBtn")
+          .addEventListener("click", function () {
+            const btn = this;
+            if (navigator.geolocation) {
+              const originalText = btn.innerHTML;
+              btn.innerHTML = "⏳ Locating...";
+              navigator.geolocation.getCurrentPosition(
+                function (position) {
+                  const lat = position.coords.latitude;
+                  const lng = position.coords.longitude;
+                  mapFrame.src = `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
+                  btn.innerHTML = "📍 Location Found";
+                  btn.style.backgroundColor = "#2ed573";
+                  setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.backgroundColor = ""; // Reset to CSS default
+                  }, 3000);
+                },
+                function (error) {
+                  alert("Error getting location: " + error.message);
+                  btn.innerHTML = originalText;
+                },
+              );
+            } else {
+              alert("Geolocation is not supported by this browser.");
+            }
+          });
+      </script>
+
+      <!-- Branches Section -->
+      <h2 class="mb-2">Our Branches</h2>
+      <div class="features" style="margin-top: 0; margin-bottom: 3rem">
+        <div class="feature-card" style="text-align: left">
+          <h3 class="mb-1">🏙️ Downtown Branch</h3>
+          <p class="text-muted mb-1">
+            <strong>Address:</strong> 123 Main Street, Downtown
+          </p>
+          <p class="text-muted mb-1"><strong>Phone:</strong> +91 98765 43210</p>
+          <p class="text-muted mb-1">
+            <strong>Hours:</strong> 10:00 AM - 11:00 PM
+          </p>
+          <span
+            style="
+              display: inline-block;
+              margin-top: 0.5rem;
+              font-size: 0.85rem;
+              background: #e1f5fe;
+              color: #0288d1;
+              padding: 4px 8px;
+              border-radius: 4px;
+            "
+            >Fine Dining</span
+          >
+        </div>
+
+        <div class="feature-card" style="text-align: left">
+          <h3 class="mb-1">🏘️ Suburban Branch</h3>
+          <p class="text-muted mb-1">
+            <strong>Address:</strong> 456 Park Avenue, Green Valley
+          </p>
+          <p class="text-muted mb-1"><strong>Phone:</strong> +91 98765 43211</p>
+          <p class="text-muted mb-1">
+            <strong>Hours:</strong> 11:00 AM - 10:00 PM
+          </p>
+          <span
+            style="
+              display: inline-block;
+              margin-top: 0.5rem;
+              font-size: 0.85rem;
+              background: #e8f5e9;
+              color: #2e7d32;
+              padding: 4px 8px;
+              border-radius: 4px;
+            "
+            >Family Friendly</span
+          >
+        </div>
+
+        <div class="feature-card" style="text-align: left">
+          <h3 class="mb-1">🎓 University Branch</h3>
+          <p class="text-muted mb-1">
+            <strong>Address:</strong> 789 College Road
+          </p>
+          <p class="text-muted mb-1"><strong>Phone:</strong> +91 98765 43212</p>
+          <p class="text-muted mb-1">
+            <strong>Hours:</strong> 9:00 AM - 12:00 AM
+          </p>
+          <span
+            style="
+              display: inline-block;
+              margin-top: 0.5rem;
+              font-size: 0.85rem;
+              background: #fff3e0;
+              color: #ef6c00;
+              padding: 4px 8px;
+              border-radius: 4px;
+            "
+            >Student Hangout</span
+          >
+        </div>
+
+        <div class="feature-card" style="text-align: left">
+          <h3 class="mb-1">🛍️ Mall Branch</h3>
+          <p class="text-muted mb-1">
+            <strong>Address:</strong> Mega Mall, 2nd Floor
+          </p>
+          <p class="text-muted mb-1"><strong>Phone:</strong> +91 98765 43213</p>
+          <p class="text-muted mb-1">
+            <strong>Hours:</strong> 10:00 AM - 9:00 PM
+          </p>
+          <span
+            style="
+              display: inline-block;
+              margin-top: 0.5rem;
+              font-size: 0.85rem;
+              background: #fce4ec;
+              color: #c2185b;
+              padding: 4px 8px;
+              border-radius: 4px;
+            "
+            >Stop & Shop</span
+          >
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="card mb-3">
+        <h2 class="mb-2">📞 Contact Information</h2>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+          "
+        >
+          <div class="text-center">
+            <div
+              style="
+                font-size: 2rem;
+                color: var(--primary);
+                margin-bottom: 0.5rem;
+              "
+            >
+              📱
+            </div>
+            <h4>Customer Support</h4>
+            <p class="text-muted">+91 1800 123 4567</p>
+          </div>
+
+          <div class="text-center">
+            <div
+              style="
+                font-size: 2rem;
+                color: var(--primary);
+                margin-bottom: 0.5rem;
+              "
+            >
+              📧
+            </div>
+            <h4>Email Support</h4>
+            <p class="text-muted">support@foodfrenzy.com</p>
+          </div>
+
+          <div class="text-center">
+            <div
+              style="
+                font-size: 2rem;
+                color: var(--primary);
+                margin-bottom: 0.5rem;
+              "
+            >
+              🏢
+            </div>
+            <h4>Corporate Office</h4>
+            <p class="text-muted">789 Business Park</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery Information -->
+      <div class="card mb-3" style="background: #fdfdfd; border-color: #eee">
+        <h3>🚚 Delivery Information</h3>
+        <ul
+          style="
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+            color: var(--text-muted);
+          "
+        >
+          <li class="mb-1">
+            <strong>Delivery Time:</strong> 30-45 minutes (depending on location
+            and traffic)
+          </li>
+          <li class="mb-1">
+            <strong>Delivery Charges:</strong> ₹30 within 5km, ₹50 for 5-10km,
+            Free for orders above ₹500
+          </li>
+          <li class="mb-1">
+            <strong>Minimum Order:</strong> ₹200 for delivery
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        &copy; 2026 FoodFrenzy. Made with
+        <span style="color: var(--primary)">❤️</span> for foodies.
+      </p>
+    </footer>
+  </body>
+</html>

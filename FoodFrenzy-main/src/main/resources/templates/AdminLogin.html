@@ -1,0 +1,71 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodFrenzy - Admin Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div th:replace="~{Navigation :: navbar}"></div>
+
+    <div class="auth-container animate-fade">
+      <div class="auth-card">
+        <h2 class="text-center mb-2">Admin Portal</h2>
+
+        <div
+          th:if="${success}"
+          class="message success"
+          th:text="${success}"
+        ></div>
+        <div th:if="${error}" class="message error" th:text="${error}"></div>
+
+        <!-- Admin Login Form -->
+        <form
+          th:action="@{/adminLogin}"
+          method="post"
+          th:object="${adminLogin}"
+        >
+          <div class="form-group">
+            <label>Admin Email</label>
+            <input
+              type="email"
+              th:field="*{adminEmail}"
+              placeholder="admin@foodfrenzy.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              th:field="*{adminPassword}"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn secondary" style="width: 100%">
+            Access Dashboard
+          </button>
+        </form>
+
+        <div class="text-center mt-2">
+          <p class="text-muted">
+            Not an admin?
+            <a
+              th:href="@{/login}"
+              style="color: var(--primary); font-weight: 600"
+              >User Login</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
