@@ -24,15 +24,20 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    port: 587
+    port: 465
     username: ${EMAIL_USERNAME:pksingh76311@gmail.com}
     password: ${EMAIL_PASSWORD:tokaxywkkahfaojc}
     properties:
       mail:
-        smtp: 
+        protocol: smtps
+        smtp:
           auth: true
-          starttls:
+          ssl:
             enable: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
 
 # Microservice URLs (use consistent naming)
 services:
