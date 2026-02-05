@@ -18,6 +18,13 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     public void sendVerificationEmail(String to, String name, String code, String role) throws MessagingException {
+        System.out.println("=== EMAIL SERVICE DEBUG ===");
+        System.out.println("Attempting to send verification email to: " + to);
+        System.out.println("Name: " + name);
+        System.out.println("Verification Code: " + code);
+        System.out.println("Role: " + role);
+        System.out.println("APP_URL: " + appUrl);
+
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
@@ -26,6 +33,7 @@ public class EmailService {
         helper.setSubject("FoodFrenzy - Account Verification");
 
         String verifyUrl = appUrl + "/verify?code=" + code + "&role=" + role;
+        System.out.println("Verification URL: " + verifyUrl);
 
         String content = "<h3>Hello, " + name + "!</h3>"
                 + "<p>Thank you for registering with FoodFrenzy. Please click the link below to verify your account:</p>"
@@ -35,5 +43,7 @@ public class EmailService {
         helper.setText(content, true);
 
         mailSender.send(message);
+        System.out.println("Email sent successfully to: " + to);
+        System.out.println("=========================");
     }
 }

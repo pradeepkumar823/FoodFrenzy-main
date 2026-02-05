@@ -21,6 +21,7 @@ import com.example.demo.entities.User;
 import com.example.demo.services.AdminServices;
 import com.example.demo.services.EmailService;
 import com.example.demo.services.UserServices;
+import com.example.demo.utils.EmailNormalizer;
 
 @Controller
 public class RegisterController {
@@ -50,23 +51,30 @@ public class RegisterController {
             HttpServletResponse response,
             RedirectAttributes redirectAttributes) {
         try {
-            // Consolidate email based on role
-            String email = "ADMIN".equalsIgnoreCase(role) ? adminDto.getEmail() : userDto.getEmail();
+            // Consolidate and normalize email based on role
+            String rawEmail = "ADMIN".equalsIgnoreCase(role) ? adminDto.getEmail() : userDto.getEmail();
 
-            if (email == null || email.isEmpty()) {
+            if (rawEmail == null || rawEmail.isEmpty()) {
                 model.addAttribute("error", "Email is required");
                 return "Register";
             }
 
-            email = email.toLowerCase();
+            String normalizedEmail = EmailNormalizer.normalize(rawEmail);
+
+            // Set normalized email back to DTOs for consistent registration
+            if ("ADMIN".equalsIgnoreCase(role)) {
+                adminDto.setEmail(normalizedEmail);
+            } else {
+                userDto.setEmail(normalizedEmail);
+            }
 
             // Check for duplicate email in User table
-            if (userServices.getUserByEmail(email) != null) {
+            if (userServices.getUserByEmail(normalizedEmail) != null) {
                 model.addAttribute("error", "Email already registered as a Customer");
                 return "Register";
             }
             // Check for duplicate email in Admin table
-            if (adminServices.validateAdminEmail(email)) {
+            if (adminServices.validateAdminEmail(normalizedEmail)) {
                 model.addAttribute("error", "Email already registered as an Admin");
                 return "Register";
             }
@@ -92,9 +100,9 @@ public class RegisterController {
                     userServices.addUser(user);
                 }
 
-                // Send verification email - retrieve user from DB to get verification code
+                // Send verification email - retrieve user from DB (lookup by normalized email)
                 try {
-                    User savedUser = userServices.getUserByEmail(user.getUserEmail());
+                    User savedUser = userServices.getUserByEmail(normalizedEmail);
                     if (savedUser != null && savedUser.getVerificationCode() != null) {
                         emailService.sendVerificationEmail(
                                 savedUser.getUserEmail(),
@@ -114,9 +122,7 @@ public class RegisterController {
                 }
                 return "redirect:/login";
             }
-        } catch (
-
-        Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "Registration failed: " + e.getMessage());
             model.addAttribute("user", new UserDTO());
@@ -134,13 +140,16 @@ public class RegisterController {
     @PostMapping("/admin/register")
     public String registerAdmin(@ModelAttribute("admin") AdminDTO adminDTO, RedirectAttributes redirectAttributes) {
         try {
+            String normalizedEmail = EmailNormalizer.normalize(adminDTO.getEmail());
+            adminDTO.setEmail(normalizedEmail);
+
             // Check for duplicate email in User table
-            if (userServices.getUserByEmail(adminDTO.getEmail()) != null) {
+            if (userServices.getUserByEmail(normalizedEmail) != null) {
                 redirectAttributes.addFlashAttribute("error", "Email already registered as a User");
                 return "redirect:/admin/register";
             }
             // Check for duplicate email in Admin table
-            if (adminServices.validateAdminEmail(adminDTO.getEmail())) {
+            if (adminServices.validateAdminEmail(normalizedEmail)) {
                 redirectAttributes.addFlashAttribute("error", "Email already registered as an Admin");
                 return "redirect:/admin/register";
             }
