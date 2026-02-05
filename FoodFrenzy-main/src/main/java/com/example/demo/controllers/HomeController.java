@@ -132,12 +132,20 @@ public class HomeController {
 		String adminEmail = login.getAdminEmail();
 		String adminPassword = login.getAdminPassword();
 
-		if (adminServices.validateAdminCredentials(adminEmail, adminPassword)) {
-			if (!adminServices.isAdminVerified(adminEmail)) {
-				model.addAttribute("error", "Your account is not verified. Please click 'Verify with Google' first.");
-				return "Login";
-			}
+		// First check if admin email exists
+		if (!adminServices.validateAdminEmail(adminEmail)) {
+			model.addAttribute("error", "Invalid email or password");
+			return "Login";
+		}
 
+		// Then check if verified
+		if (!adminServices.isAdminVerified(adminEmail)) {
+			model.addAttribute("error", "Your account is not verified. Please click 'Verify with Google' first.");
+			return "Login";
+		}
+
+		// Finally validate password
+		if (adminServices.validateAdminCredentials(adminEmail, adminPassword)) {
 			Admin admin = adminServices.getAll().stream()
 					.filter(a -> a.getAdminEmail().equalsIgnoreCase(adminEmail))
 					.findFirst().orElse(null);
