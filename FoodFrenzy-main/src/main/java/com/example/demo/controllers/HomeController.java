@@ -131,9 +131,15 @@ public class HomeController {
 			RedirectAttributes redirectAttributes) {
 		String adminEmail = login.getAdminEmail();
 		String adminPassword = login.getAdminPassword();
+
 		if (adminServices.validateAdminCredentials(adminEmail, adminPassword)) {
+			if (!adminServices.isAdminVerified(adminEmail)) {
+				model.addAttribute("error", "Your account is not verified. Please click 'Verify with Google' first.");
+				return "Login";
+			}
+
 			Admin admin = adminServices.getAll().stream()
-					.filter(a -> a.getAdminEmail().equals(adminEmail))
+					.filter(a -> a.getAdminEmail().equalsIgnoreCase(adminEmail))
 					.findFirst().orElse(null);
 			session.setAttribute("loggedInUser", admin);
 			session.setAttribute("role", "ADMIN");

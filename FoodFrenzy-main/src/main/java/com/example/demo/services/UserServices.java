@@ -32,7 +32,9 @@ public class UserServices {
 	}
 
 	public User getUserByEmail(String email) {
-		return this.userRepository.findByUserEmail(email).orElse(null);
+		if (email == null)
+			return null;
+		return this.userRepository.findByUserEmailIgnoreCase(email.toLowerCase()).orElse(null);
 	}
 
 	public void updateUser(User user, int userId) {
@@ -53,6 +55,11 @@ public class UserServices {
 		String encodedPassword = passwordEncoder.encode(user.getUserPassword());
 		user.setUserPassword(encodedPassword);
 
+		// Always store email in lowercase
+		if (user.getUserEmail() != null) {
+			user.setUserEmail(user.getUserEmail().toLowerCase());
+		}
+
 		// Generate verification code (optional now, but keeping for structure)
 		String verificationCode = UUID.randomUUID().toString();
 		user.setVerificationCode(verificationCode);
@@ -62,7 +69,9 @@ public class UserServices {
 	}
 
 	public boolean validateLoginCredentials(String email, String password) {
-		User user = this.userRepository.findByUserEmail(email).orElse(null);
+		if (email == null)
+			return false;
+		User user = this.userRepository.findByUserEmailIgnoreCase(email.toLowerCase()).orElse(null);
 		if (user != null) {
 			if (!user.isVerified()) {
 				return false; // Not verified
@@ -90,7 +99,9 @@ public class UserServices {
 	}
 
 	public boolean validationLoginCredentials(String email) {
-		User user = this.userRepository.findByUserEmail(email).orElse(null);
+		if (email == null)
+			return false;
+		User user = this.userRepository.findByUserEmailIgnoreCase(email.toLowerCase()).orElse(null);
 		if (user != null) {
 			return true;
 		}

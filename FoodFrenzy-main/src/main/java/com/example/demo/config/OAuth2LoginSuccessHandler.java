@@ -25,8 +25,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             Authentication authentication) throws IOException, ServletException {
         OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
         String email = oauthUser.getAttribute("email");
+        if (email != null) {
+            email = email.toLowerCase();
+        }
 
-        Optional<Admin> adminOpt = adminRepository.findByAdminEmail(email);
+        Optional<Admin> adminOpt = adminRepository.findByAdminEmailIgnoreCase(email);
 
         if (adminOpt.isPresent()) {
             Admin admin = adminOpt.get();
@@ -40,8 +43,10 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                     + "&email=" + email);
         } else {
             // Not a registered admin email
+            String errorMessage = "The Google account (" + email
+                    + ") is not registered as an Admin. Please register with this email or use the correct Google account.";
             response.sendRedirect("/login?error="
-                    + java.net.URLEncoder.encode("This Google account is not registered as an Admin.", "UTF-8"));
+                    + java.net.URLEncoder.encode(errorMessage, "UTF-8"));
         }
     }
 }

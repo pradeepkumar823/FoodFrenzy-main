@@ -47,6 +47,11 @@ public class AdminServices {
 		String encodePassword = passwordEncoder.encode(admin.getAdminPassword());
 		admin.setAdminPassword(encodePassword);
 
+		// Always store email in lowercase
+		if (admin.getAdminEmail() != null) {
+			admin.setAdminEmail(admin.getAdminEmail().toLowerCase());
+		}
+
 		// Generate verification code
 		String verificationCode = UUID.randomUUID().toString();
 		admin.setVerificationCode(verificationCode);
@@ -55,19 +60,28 @@ public class AdminServices {
 		this.adminRepository.save(admin);
 	}
 
+	public boolean isAdminVerified(String email) {
+		if (email == null)
+			return false;
+		return adminRepository.findByAdminEmailIgnoreCase(email.toLowerCase())
+				.map(Admin::isVerified)
+				.orElse(false);
+	}
+
 	public boolean validateAdminCredentials(String email, String password) {
-		Admin admin = adminRepository.findByAdminEmail(email).orElse(null);
+		if (email == null)
+			return false;
+		Admin admin = adminRepository.findByAdminEmailIgnoreCase(email.toLowerCase()).orElse(null);
 		if (admin != null) {
-			if (!admin.isVerified()) {
-				return false; // Not verified
-			}
 			return passwordEncoder.matches(password, admin.getAdminPassword());
 		}
 		return false;
 	}
 
 	public boolean validateAdminEmail(String email) {
-		return this.adminRepository.findByAdminEmail(email).isPresent();
+		if (email == null)
+			return false;
+		return this.adminRepository.findByAdminEmailIgnoreCase(email.toLowerCase()).isPresent();
 	}
 
 	public boolean verifyAdmin(String code) {
