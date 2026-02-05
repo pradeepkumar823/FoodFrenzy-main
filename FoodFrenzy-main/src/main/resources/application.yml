@@ -8,7 +8,7 @@ spring:
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/foodfrenzy_db?useSSL=false&serverTimezone=UTC}
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:MySQL@76310}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -22,11 +22,23 @@ spring:
   thymeleaf:
     cache: false
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "https://foodfrenzy-main.onrender.com/login/oauth2/code/google"
+            scope:
+              - email
+              - profile
+
   mail:
     host: smtp.gmail.com
     port: 587
     username: ${EMAIL_USERNAME:pksingh76311@gmail.com}
-    password: ${EMAIL_PASSWORD:tokaxywkkahfaojc}
+    password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:

@@ -20,7 +20,6 @@ import com.example.demo.entities.Admin;
 import com.example.demo.entities.User;
 import com.example.demo.services.AdminServices;
 import com.example.demo.services.UserServices;
-import com.example.demo.services.EmailService;
 
 @Controller
 public class RegisterController {
@@ -36,9 +35,6 @@ public class RegisterController {
 
     @Autowired
     private AdminServices adminServices;
-
-    @Autowired
-    private EmailService emailService;
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") UserDTO userDto,
@@ -67,12 +63,9 @@ public class RegisterController {
                 } else {
                     Admin admin = adminDto.toEntity();
                     adminServices.addAdmin(admin);
-                    // Send verification email
-                    emailService.sendVerificationEmail(adminDto.getEmail(), adminDto.getName(),
-                            admin.getVerificationCode(), "ADMIN");
                 }
                 redirectAttributes.addFlashAttribute("success",
-                        "Admin registered successfully! Please check your email to verify account.");
+                        "Admin registered successfully! Please click 'Verify with Google' on the login page to activate your account.");
                 return "redirect:/login";
             } else {
                 if (userClient != null) {
@@ -81,12 +74,9 @@ public class RegisterController {
                 } else {
                     User user = userDto.toEntity();
                     userServices.addUser(user);
-                    // Send verification email
-                    emailService.sendVerificationEmail(userDto.getEmail(), userDto.getName(),
-                            user.getVerificationCode(), "USER");
                 }
                 redirectAttributes.addFlashAttribute("success",
-                        "User registered successfully! Please check your email to verify account.");
+                        "User registered successfully! You can now login directly.");
                 return "redirect:/login";
             }
         } catch (
@@ -126,13 +116,9 @@ public class RegisterController {
             } else {
                 Admin admin = adminDTO.toEntity();
                 adminServices.addAdmin(admin);
-
-                // Send verification email
-                emailService.sendVerificationEmail(admin.getAdminEmail(), admin.getAdminName(),
-                        admin.getVerificationCode(), "ADMIN");
             }
             redirectAttributes.addFlashAttribute("success",
-                    "Admin registered successfully! Please check your email to verify account.");
+                    "Admin registered successfully! Please click 'Verify with Google' on the login page to activate your account.");
             return "redirect:/login";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Registration failed");

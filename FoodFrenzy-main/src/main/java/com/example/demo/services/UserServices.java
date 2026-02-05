@@ -53,10 +53,10 @@ public class UserServices {
 		String encodedPassword = passwordEncoder.encode(user.getUserPassword());
 		user.setUserPassword(encodedPassword);
 
-		// Generate verification code
+		// Generate verification code (optional now, but keeping for structure)
 		String verificationCode = UUID.randomUUID().toString();
 		user.setVerificationCode(verificationCode);
-		user.setVerified(false);
+		user.setVerified(true); // Direct login allowed
 
 		this.userRepository.save(user);
 	}

@@ -82,7 +82,10 @@ public class HomeController {
 	}
 
 	@GetMapping("/login")
-	public String login(@RequestParam(value = "email", required = false) String email, HttpSession session,
+	public String login(@RequestParam(value = "email", required = false) String email,
+			@RequestParam(value = "success", required = false) String success,
+			@RequestParam(value = "error", required = false) String error,
+			HttpSession session,
 			Model model) {
 		if (session.getAttribute("loggedInUser") != null) {
 			return "redirect:/profile";
@@ -93,6 +96,12 @@ public class HomeController {
 		if (email != null) {
 			adminLogin.setAdminEmail(email);
 			userLogin.setUserEmail(email);
+		}
+		if (success != null) {
+			model.addAttribute("success", success);
+		}
+		if (error != null) {
+			model.addAttribute("error", error);
 		}
 
 		model.addAttribute("adminLogin", adminLogin);

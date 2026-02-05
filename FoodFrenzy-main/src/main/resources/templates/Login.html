@@ -130,6 +130,24 @@
             <button type="submit" class="btn secondary" style="width: 100%">
               Login as Admin
             </button>
+
+            <!-- Google Verification Button -->
+            <div class="mt-2 text-center">
+              <p class="text-muted mb-1">Not verified?</p>
+              <a
+                th:href="@{/oauth2/authorization/google}"
+                class="btn outline"
+                style="
+                  width: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="fa-brands fa-google"></i> Verify with Google
+              </a>
+            </div>
           </form>
         </div>
 

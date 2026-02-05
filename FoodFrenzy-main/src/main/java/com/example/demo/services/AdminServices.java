@@ -50,7 +50,7 @@ public class AdminServices {
 		// Generate verification code
 		String verificationCode = UUID.randomUUID().toString();
 		admin.setVerificationCode(verificationCode);
-		admin.setVerified(false);
+		admin.setVerified(false); // Requires Google OAuth verification
 
 		this.adminRepository.save(admin);
 	}
