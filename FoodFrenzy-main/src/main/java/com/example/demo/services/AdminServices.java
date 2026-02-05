@@ -66,6 +66,10 @@ public class AdminServices {
 		return false;
 	}
 
+	public boolean validateAdminEmail(String email) {
+		return this.adminRepository.findByAdminEmail(email).isPresent();
+	}
+
 	public boolean verifyAdmin(String code) {
 		return getAll().stream()
 				.filter(a -> code.equals(a.getVerificationCode()))

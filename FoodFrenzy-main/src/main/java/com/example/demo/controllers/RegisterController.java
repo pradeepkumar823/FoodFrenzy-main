@@ -50,6 +50,17 @@ public class RegisterController {
             HttpServletResponse response,
             RedirectAttributes redirectAttributes) {
         try {
+            // Check for duplicate email in User table
+            if (userServices.getUserByEmail(userDto.getEmail()) != null) {
+                model.addAttribute("error", "Email already registered as a User");
+                return "Register";
+            }
+            // Check for duplicate email in Admin table
+            if (adminServices.validateAdminEmail(userDto.getEmail())) {
+                model.addAttribute("error", "Email already registered as an Admin");
+                return "Register";
+            }
+
             if ("ADMIN".equalsIgnoreCase(role)) {
                 if (adminClient != null) {
                     adminClient.createAdmin(adminDto);
@@ -98,6 +109,17 @@ public class RegisterController {
     @PostMapping("/admin/register")
     public String registerAdmin(@ModelAttribute("admin") AdminDTO adminDTO, RedirectAttributes redirectAttributes) {
         try {
+            // Check for duplicate email in User table
+            if (userServices.getUserByEmail(adminDTO.getEmail()) != null) {
+                redirectAttributes.addFlashAttribute("error", "Email already registered as a User");
+                return "redirect:/admin/register";
+            }
+            // Check for duplicate email in Admin table
+            if (adminServices.validateAdminEmail(adminDTO.getEmail())) {
+                redirectAttributes.addFlashAttribute("error", "Email already registered as an Admin");
+                return "redirect:/admin/register";
+            }
+
             if (adminClient != null) {
                 adminClient.createAdmin(adminDTO);
                 redirectAttributes.addFlashAttribute("success", "Admin registered successfully! Please login.");
