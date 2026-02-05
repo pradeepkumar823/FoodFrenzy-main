@@ -43,13 +43,31 @@ public class AdminServices {
 		this.adminRepository.deleteById(adminId);
 	}
 
+	// Normalize email to handle Gmail's dot-ignoring behavior
+	private String normalizeEmail(String email) {
+		if (email == null) {
+			return null;
+		}
+		email = email.toLowerCase().trim();
+
+		// For Gmail addresses, remove dots before @ symbol
+		if (email.endsWith("@gmail.com")) {
+			String[] parts = email.split("@");
+			if (parts.length == 2) {
+				String localPart = parts[0].replace(".", "");
+				email = localPart + "@gmail.com";
+			}
+		}
+		return email;
+	}
+
 	public void addAdmin(Admin admin) {
 		String encodePassword = passwordEncoder.encode(admin.getAdminPassword());
 		admin.setAdminPassword(encodePassword);
 
-		// Always store email in lowercase
+		// Normalize email (handles Gmail dots and lowercase)
 		if (admin.getAdminEmail() != null) {
-			admin.setAdminEmail(admin.getAdminEmail().toLowerCase());
+			admin.setAdminEmail(normalizeEmail(admin.getAdminEmail()));
 		}
 
 		// Generate verification code
@@ -63,7 +81,7 @@ public class AdminServices {
 	public boolean isAdminVerified(String email) {
 		if (email == null)
 			return false;
-		return adminRepository.findByAdminEmailIgnoreCase(email.toLowerCase())
+		return adminRepository.findByAdminEmailIgnoreCase(normalizeEmail(email))
 				.map(Admin::isVerified)
 				.orElse(false);
 	}
@@ -71,7 +89,7 @@ public class AdminServices {
 	public boolean validateAdminCredentials(String email, String password) {
 		if (email == null)
 			return false;
-		Admin admin = adminRepository.findByAdminEmailIgnoreCase(email.toLowerCase()).orElse(null);
+		Admin admin = adminRepository.findByAdminEmailIgnoreCase(normalizeEmail(email)).orElse(null);
 		if (admin != null) {
 			return passwordEncoder.matches(password, admin.getAdminPassword());
 		}
@@ -81,7 +99,7 @@ public class AdminServices {
 	public boolean validateAdminEmail(String email) {
 		if (email == null)
 			return false;
-		return this.adminRepository.findByAdminEmailIgnoreCase(email.toLowerCase()).isPresent();
+		return this.adminRepository.findByAdminEmailIgnoreCase(normalizeEmail(email)).isPresent();
 	}
 
 	public boolean verifyAdmin(String code) {

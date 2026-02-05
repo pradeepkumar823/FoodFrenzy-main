@@ -19,6 +19,7 @@ import com.example.demo.dto.UserDTO;
 import com.example.demo.entities.Admin;
 import com.example.demo.entities.User;
 import com.example.demo.services.AdminServices;
+import com.example.demo.services.EmailService;
 import com.example.demo.services.UserServices;
 
 @Controller
@@ -35,6 +36,9 @@ public class RegisterController {
 
     @Autowired
     private AdminServices adminServices;
+
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") UserDTO userDto,
@@ -78,15 +82,30 @@ public class RegisterController {
                         "Admin registered successfully! Please click 'Verify with Google' on the login page to activate your account.");
                 return "redirect:/login";
             } else {
+                User user;
                 if (userClient != null) {
                     userDto.setRole("USER");
                     userClient.registerUser(userDto);
+                    user = userDto.toEntity();
                 } else {
-                    User user = userDto.toEntity();
+                    user = userDto.toEntity();
                     userServices.addUser(user);
                 }
-                redirectAttributes.addFlashAttribute("success",
-                        "User registered successfully! You can now login directly.");
+
+                // Send verification email
+                try {
+                    emailService.sendVerificationEmail(
+                            user.getUserEmail(),
+                            user.getUserName(),
+                            user.getVerificationCode(),
+                            "USER");
+                    redirectAttributes.addFlashAttribute("success",
+                            "Registration successful! Please check your email to verify your account.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    redirectAttributes.addFlashAttribute("success",
+                            "Registration successful! However, we couldn't send the verification email. Please contact support.");
+                }
                 return "redirect:/login";
             }
         } catch (

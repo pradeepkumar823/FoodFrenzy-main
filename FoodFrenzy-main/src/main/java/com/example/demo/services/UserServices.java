@@ -31,10 +31,28 @@ public class UserServices {
 				.orElse(null);
 	}
 
+	// Normalize email to handle Gmail's dot-ignoring behavior
+	private String normalizeEmail(String email) {
+		if (email == null) {
+			return null;
+		}
+		email = email.toLowerCase().trim();
+
+		// For Gmail addresses, remove dots before @ symbol
+		if (email.endsWith("@gmail.com")) {
+			String[] parts = email.split("@");
+			if (parts.length == 2) {
+				String localPart = parts[0].replace(".", "");
+				email = localPart + "@gmail.com";
+			}
+		}
+		return email;
+	}
+
 	public User getUserByEmail(String email) {
 		if (email == null)
 			return null;
-		return this.userRepository.findByUserEmailIgnoreCase(email.toLowerCase()).orElse(null);
+		return this.userRepository.findByUserEmailIgnoreCase(normalizeEmail(email)).orElse(null);
 	}
 
 	public void updateUser(User user, int userId) {
@@ -55,15 +73,15 @@ public class UserServices {
 		String encodedPassword = passwordEncoder.encode(user.getUserPassword());
 		user.setUserPassword(encodedPassword);
 
-		// Always store email in lowercase
+		// Normalize email (handles Gmail dots and lowercase)
 		if (user.getUserEmail() != null) {
-			user.setUserEmail(user.getUserEmail().toLowerCase());
+			user.setUserEmail(normalizeEmail(user.getUserEmail()));
 		}
 
-		// Generate verification code (optional now, but keeping for structure)
+		// Generate verification code for email verification
 		String verificationCode = UUID.randomUUID().toString();
 		user.setVerificationCode(verificationCode);
-		user.setVerified(true); // Direct login allowed
+		user.setVerified(false); // Requires email verification
 
 		this.userRepository.save(user);
 	}
@@ -71,7 +89,7 @@ public class UserServices {
 	public boolean validateLoginCredentials(String email, String password) {
 		if (email == null)
 			return false;
-		User user = this.userRepository.findByUserEmailIgnoreCase(email.toLowerCase()).orElse(null);
+		User user = this.userRepository.findByUserEmailIgnoreCase(normalizeEmail(email)).orElse(null);
 		if (user != null) {
 			if (!user.isVerified()) {
 				return false; // Not verified
@@ -101,7 +119,7 @@ public class UserServices {
 	public boolean validationLoginCredentials(String email) {
 		if (email == null)
 			return false;
-		User user = this.userRepository.findByUserEmailIgnoreCase(email.toLowerCase()).orElse(null);
+		User user = this.userRepository.findByUserEmailIgnoreCase(normalizeEmail(email)).orElse(null);
 		if (user != null) {
 			return true;
 		}

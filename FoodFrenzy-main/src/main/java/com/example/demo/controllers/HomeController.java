@@ -81,6 +81,39 @@ public class HomeController {
 		return "About";
 	}
 
+	// Email verification endpoint for users
+	@GetMapping("/verify")
+	public String verifyEmail(@RequestParam("code") String code,
+			@RequestParam(value = "role", defaultValue = "USER") String role,
+			RedirectAttributes redirectAttributes) {
+		try {
+			if ("USER".equalsIgnoreCase(role)) {
+				boolean verified = services.verifyUser(code);
+				if (verified) {
+					redirectAttributes.addFlashAttribute("success",
+							"Email verified successfully! You can now login.");
+				} else {
+					redirectAttributes.addFlashAttribute("error",
+							"Invalid or expired verification link.");
+				}
+			} else if ("ADMIN".equalsIgnoreCase(role)) {
+				boolean verified = adminServices.verifyAdmin(code);
+				if (verified) {
+					redirectAttributes.addFlashAttribute("success",
+							"Admin account verified successfully! You can now login.");
+				} else {
+					redirectAttributes.addFlashAttribute("error",
+							"Invalid or expired verification link.");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute("error",
+					"Verification failed. Please try again or contact support.");
+		}
+		return "redirect:/login";
+	}
+
 	@GetMapping("/login")
 	public String login(@RequestParam(value = "email", required = false) String email,
 			@RequestParam(value = "success", required = false) String success,
@@ -170,19 +203,32 @@ public class HomeController {
 	}
 
 	@PostMapping("/userLogin")
-	public String userLogin(@ModelAttribute("userLogin") UserLogin login, Model model,
+	public String userLogin(@Valid @ModelAttribute("userLogin") UserLogin login, Model model,
 			HttpSession session, HttpServletRequest request, HttpServletResponse response,
 			RedirectAttributes redirectAttributes) {
-		String email = login.getUserEmail();
-		String password = login.getUserPassword();
+		String userEmail = login.getUserEmail();
+		String userPassword = login.getUserPassword();
 
-		if (services.validateLoginCredentials(email, password)) {
-			User loggedInUser = this.services.getUserByEmail(email);
-			session.setAttribute("loggedInUser", loggedInUser);
+		// First check if user email exists
+		User user = services.getUserByEmail(userEmail);
+		if (user == null) {
+			model.addAttribute("error", "Invalid email or password");
+			return "Login";
+		}
+
+		// Then check if verified
+		if (!user.isVerified()) {
+			model.addAttribute("error", "Please verify your email first. Check your inbox for the verification link.");
+			return "Login";
+		}
+
+		// Finally validate password
+		if (services.validateLoginCredentials(userEmail, userPassword)) {
+			session.setAttribute("loggedInUser", user);
 			session.setAttribute("role", "USER");
 
 			// Integrate with Spring Security
-			Authentication auth = new UsernamePasswordAuthenticationToken(loggedInUser, null,
+			Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
 					Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
 			SecurityContext context = SecurityContextHolder.createEmptyContext();
 			context.setAuthentication(auth);
@@ -192,10 +238,9 @@ public class HomeController {
 			redirectAttributes.addFlashAttribute("success", "User logged in successfully!");
 			return "redirect:/profile";
 		} else {
-			model.addAttribute("error2", "Invalid email or password");
+			model.addAttribute("error", "Invalid email or password");
 			return "Login";
 		}
-
 	}
 
 	@GetMapping("/profile")
