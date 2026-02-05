@@ -46,13 +46,23 @@ public class RegisterController {
             HttpServletResponse response,
             RedirectAttributes redirectAttributes) {
         try {
+            // Consolidate email based on role
+            String email = "ADMIN".equalsIgnoreCase(role) ? adminDto.getEmail() : userDto.getEmail();
+
+            if (email == null || email.isEmpty()) {
+                model.addAttribute("error", "Email is required");
+                return "Register";
+            }
+
+            email = email.toLowerCase();
+
             // Check for duplicate email in User table
-            if (userServices.getUserByEmail(userDto.getEmail()) != null) {
-                model.addAttribute("error", "Email already registered as a User");
+            if (userServices.getUserByEmail(email) != null) {
+                model.addAttribute("error", "Email already registered as a Customer");
                 return "Register";
             }
             // Check for duplicate email in Admin table
-            if (adminServices.validateAdminEmail(userDto.getEmail())) {
+            if (adminServices.validateAdminEmail(email)) {
                 model.addAttribute("error", "Email already registered as an Admin");
                 return "Register";
             }

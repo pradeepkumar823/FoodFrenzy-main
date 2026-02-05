@@ -44,7 +44,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         } else {
             // Not a registered admin email
             String errorMessage = "The Google account (" + email
-                    + ") is not registered as an Admin. Please register with this email or use the correct Google account.";
+                    + ") is not registered as an Admin. Please register with this email on our platform first.";
             response.sendRedirect("/login?error="
                     + java.net.URLEncoder.encode(errorMessage, "UTF-8"));
         }

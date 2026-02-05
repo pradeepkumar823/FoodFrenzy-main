@@ -84,6 +84,16 @@ public class AdminServices {
 		return this.adminRepository.findByAdminEmailIgnoreCase(email.toLowerCase()).isPresent();
 	}
 
+	public Admin createAdminFromOAuth(String email, String name) {
+		Admin admin = new Admin();
+		admin.setAdminEmail(email.toLowerCase());
+		admin.setAdminName(name != null ? name : "Admin");
+		admin.setAdminPassword(passwordEncoder.encode(UUID.randomUUID().toString())); // Random password
+		admin.setAdminPhoneNumber("OAuth-" + UUID.randomUUID().toString().substring(0, 8)); // Placeholder
+		admin.setVerified(true);
+		return adminRepository.save(admin);
+	}
+
 	public boolean verifyAdmin(String code) {
 		return getAll().stream()
 				.filter(a -> code.equals(a.getVerificationCode()))
