@@ -92,15 +92,21 @@ public class RegisterController {
                     userServices.addUser(user);
                 }
 
-                // Send verification email
+                // Send verification email - retrieve user from DB to get verification code
                 try {
-                    emailService.sendVerificationEmail(
-                            user.getUserEmail(),
-                            user.getUserName(),
-                            user.getVerificationCode(),
-                            "USER");
-                    redirectAttributes.addFlashAttribute("success",
-                            "Registration successful! Please check your email to verify your account.");
+                    User savedUser = userServices.getUserByEmail(user.getUserEmail());
+                    if (savedUser != null && savedUser.getVerificationCode() != null) {
+                        emailService.sendVerificationEmail(
+                                savedUser.getUserEmail(),
+                                savedUser.getUserName(),
+                                savedUser.getVerificationCode(),
+                                "USER");
+                        redirectAttributes.addFlashAttribute("success",
+                                "Registration successful! Please check your email to verify your account.");
+                    } else {
+                        redirectAttributes.addFlashAttribute("success",
+                                "Registration successful! However, we couldn't send the verification email. Please contact support.");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     redirectAttributes.addFlashAttribute("success",
