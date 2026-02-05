@@ -11,6 +11,9 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class EmailService {
 
+    @org.springframework.beans.factory.annotation.Value("${APP_URL:http://localhost:8081}")
+    private String appUrl;
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -18,18 +21,11 @@ public class EmailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom("pksingh76311@gmail.com"); // Replaced with actual sender in production
+        helper.setFrom("pksingh76311@gmail.com");
         helper.setTo(to);
         helper.setSubject("FoodFrenzy - Account Verification");
 
-        // Dynamically get the local IP address
-        String ip = "localhost";
-        try {
-            ip = java.net.InetAddress.getLocalHost().getHostAddress();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String verifyUrl = "http://" + ip + ":8081/verify?code=" + code + "&role=" + role;
+        String verifyUrl = appUrl + "/verify?code=" + code + "&role=" + role;
 
         String content = "<h3>Hello, " + name + "!</h3>"
                 + "<p>Thank you for registering with FoodFrenzy. Please click the link below to verify your account:</p>"
