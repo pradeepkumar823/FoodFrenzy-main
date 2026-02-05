@@ -81,39 +81,6 @@ public class HomeController {
 		return "About";
 	}
 
-	// Email verification endpoint for users
-	@GetMapping("/verify")
-	public String verifyEmail(@RequestParam("code") String code,
-			@RequestParam(value = "role", defaultValue = "USER") String role,
-			RedirectAttributes redirectAttributes) {
-		try {
-			if ("USER".equalsIgnoreCase(role)) {
-				boolean verified = services.verifyUser(code);
-				if (verified) {
-					redirectAttributes.addFlashAttribute("success",
-							"Email verified successfully! You can now login.");
-				} else {
-					redirectAttributes.addFlashAttribute("error",
-							"Invalid or expired verification link.");
-				}
-			} else if ("ADMIN".equalsIgnoreCase(role)) {
-				boolean verified = adminServices.verifyAdmin(code);
-				if (verified) {
-					redirectAttributes.addFlashAttribute("success",
-							"Admin account verified successfully! You can now login.");
-				} else {
-					redirectAttributes.addFlashAttribute("error",
-							"Invalid or expired verification link.");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			redirectAttributes.addFlashAttribute("error",
-					"Verification failed. Please try again or contact support.");
-		}
-		return "redirect:/login";
-	}
-
 	@GetMapping("/login")
 	public String login(@RequestParam(value = "email", required = false) String email,
 			@RequestParam(value = "success", required = false) String success,
