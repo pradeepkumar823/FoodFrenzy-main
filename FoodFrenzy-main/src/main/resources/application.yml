@@ -36,24 +36,25 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    port: 465
-    username: ${EMAIL_USERNAME:pksingh76311@gmail.com}
+    port: 587
+    username: ${EMAIL_USERNAME}
     password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
-          ssl:
-            enable: true
           starttls:
-            enable: false
-        connectiontimeout: 5000
-        timeout: 5000
-        writetimeout: 5000
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000      
 
 # Application configuration
 app:
-  url: ${APP_URL:http://localhost:8081}
+  url: ${APP_URL:https://foodfrenzy-main.onrender.com}
 
 # Microservice URLs (use consistent naming)
 services:

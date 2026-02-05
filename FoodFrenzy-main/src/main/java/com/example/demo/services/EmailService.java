@@ -15,6 +15,9 @@ public class EmailService {
     @Value("${app.url}")
     private String appUrl;
 
+    @Value("${spring.mail.username}")
+    private String senderEmail;
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -29,7 +32,7 @@ public class EmailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom("pksingh76311@gmail.com");
+        helper.setFrom(senderEmail);
         helper.setTo(to);
         helper.setSubject("FoodFrenzy - Account Verification");
 
