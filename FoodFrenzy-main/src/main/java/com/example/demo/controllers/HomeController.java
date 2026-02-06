@@ -271,12 +271,13 @@ public class HomeController {
 
 	@GetMapping("/profile")
 	public String profile(HttpSession session, Model model) {
-		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		Object loggedInUser = session.getAttribute("loggedInUser");
 		model.addAttribute("user", loggedInUser);
 		model.addAttribute("role", session.getAttribute("role"));
 
 		if (loggedInUser != null && "USER".equals(session.getAttribute("role"))) {
-			List<OrderDTO> orders = orderServices.getOrdersByUserId(loggedInUser.getUserId())
+			User user = (User) loggedInUser;
+			List<OrderDTO> orders = orderServices.getOrdersByUserId(user.getUserId())
 					.stream()
 					.map(OrderDTO::fromEntity)
 					.collect(Collectors.toList());

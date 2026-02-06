@@ -1,106 +1,109 @@
-# FoodFrenzy
-FoodFrenzy is a comprehensive system designed for managing customers, inventory, and orders. It offers secure authentication, role-based access control, and database integration using MySQL. Built with Spring Boot and Thymeleaf, the application provides a seamless experience for admin and staff members.
+# 🍱 FoodFrenzy - Professional Food Management System
 
-![Screenshot 2024-10-02 123332](https://github.com/user-attachments/assets/1382d32f-3cbb-40c3-b6b5-9fc55cd5176f)
+FoodFrenzy is a world-class digital brand and food management platform built with a robust Spring Boot backend. It provides a seamless, high-performance experience for both gourmet customers and administrative staff.
 
+---
 
-## Features
+## 🚀 Backend Architecture & Technical Stack
 
-- **Customer Management**: Easily add, update, and delete customer information.
-- **Inventory Management**: Keep track of your inventory items, including stock levels and pricing.
-- **Order Management**: Manage customer orders, including order creation, updates, and status tracking.
-- **User Authentication**: Secure login and authentication for admin and staff members.
-- **Role-Based Access Control**: Define roles and permissions for different user types.
-- **Thymeleaf Templates**: Utilizes Thymeleaf for dynamic HTML templates.
-- **Database Integration**: Integrated with MySQL for data storage and retrieval.
+The core of FoodFrenzy is engineered for scalability, security, and type-safety.
 
-## Technology Stack
+### 🛠️ Core Technology Stack
 
-- **Backend**: Spring Boot, Java 8, Spring MVC, Spring Data JPA (Hibernate)
-- **Frontend**: Thymeleaf, HTML, CSS, JavaScript
-- **Database**: MySQL
-- **IDE**: Eclipse, Spring Tool Suite (STS)
+- **Backend Framework**: Spring Boot 3.x
+- **Language**: Java 17+
+- **Persistence Layer**: Spring Data JPA (Hibernate)
+- **Database**: MySQL 8.x
+- **Security**: Spring Security 6.x + OAuth2
+- **Templating Engine**: Thymeleaf (Server-Side Rendering)
+- **Tooling**: Maven, JUnit 5
 
-## Prerequisites
+### 🏗️ Architectural Patterns
 
-Before running this project, ensure you have the following installed:
+- **MVC (Model-View-Controller)**: Strict separation of concerns between business logic, data persistence, and UI rendering.
+- **Service Layer Pattern**: Encapsulates complex business workflows (e.g., Order Processing, Email Verification).
+- **DTO Pattern (Data Transfer Object)**: Decouples the internal database schema from the API layer, ensuring secure data exchange and preventing accidental exposure of sensitive fields.
+- **Repository Pattern**: Utilized Spring Data JPA for abstraction over database operations.
 
-- Java 8
-- MySQL
-- Maven
-- Eclipse or Spring Tool Suite (STS)
+---
 
-## Setup and Installation
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-repository-url/FoodFrenzy.git
-    ```
+## 🔐 Security & User Management
 
-2. Navigate to the project directory:
-    ```bash
-    cd FoodFrenzy
-    ```
+FoodFrenzy implements a "Security-First" approach to protect user data and administrative actions.
 
-3. Configure MySQL Database:
-    - Create a new MySQL database.
-    - Update `application.properties` with your MySQL credentials:
-      ```properties
-      spring.datasource.url=jdbc:mysql://localhost:3306/foodfrenzy
-      spring.datasource.username=root
-      spring.datasource.password=root
-      spring.jpa.hibernate.ddl-auto=update
-      ```
+### 🛡️ Authentication Flow
 
-4. Run the project:
-    ```bash
-    mvn spring-boot:run
-    ```
+- **Direct Login**: Secure credential-based login with hashed password storage.
+- **OAuth2 Integration**: Full support for "Sign in with Google," providing a frictionless experience for modern users.
+- **Email Verification**: A robust verification system triggers upon registration to ensure account authenticity.
 
-5. Access the application:
-    - Navigate to `http://localhost:8080` in your browser. 
-## Website Screenshot
+### 🚦 Role-Based Access Control (RBAC)
 
-Here is a preview of the FoodFrenzy interface:
+- **USER Role**: Access to menu browsing, profile management, and order history.
+- **ADMIN Role**: Exclusive access to the Global Management Dashboard, inventory control, and system-wide order auditing.
+- **Session Protection**: Explicit role-based session validation prevents cross-account unauthorized access (e.g., stopping a standard user from accessing Admin controllers).
 
-![Screenshot 2025-05-19 143351](https://github.com/user-attachments/assets/3e34f54c-c986-42ac-96a4-ed7ad18035a6)
-![Screenshot 2025-05-19 143427](https://github.com/user-attachments/assets/a4046d4e-8c3d-4629-8913-5543d709e80e)
-![Screenshot 2025-05-19 143441](https://github.com/user-attachments/assets/09c92348-ec06-4607-9ae4-88b28cc1e0ec)
-![Screenshot 2025-05-19 143452](https://github.com/user-attachments/assets/0e73aece-a28c-413d-9363-245358a0e439)
-![Screenshot 2025-05-19 143504](https://github.com/user-attachments/assets/ac26bd92-0fcd-473d-a175-9bc45fdb12ba)
+---
 
+## 📊 Database Design & Entity Relationships
 
-![image](https://github.com/user-attachments/assets/3d407958-efbe-449f-b4e1-5b08b9f8a28b)
+The relational schema is optimized for data integrity and efficient retrieval.
 
+- **User & Admin Entities**: Distinct tables for different personas, linked via unique email identifiers.
+- **Product Entity**: Stores menu items with categorizations (Biryani, Chinese, etc.).
+- **Order System**:
+  - **Orders Entity**: Persistent storage of transaction details, timestamps, and customer relations.
+  - **One-to-Many Relationship**: Users are mapped to multiple orders, enabling a rich "Order History" feature.
+- **Externalized Configuration**: Database credentials are managed via environment variables (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`), ensuring the codebase is production-ready and secure.
 
-![Screenshot 2024-08-24 194958](https://github.com/user-attachments/assets/c11a4710-69f8-42fd-b9d7-2b5278b2c8a3) 
+---
 
+## 🎨 Professional Brand UI/UX
 
-![Screenshot 2024-08-24 220831](https://github.com/user-attachments/assets/d3cd3cdd-cda5-460a-a253-24e45cf600b0)  
-![Screenshot 2024-08-24 195054](https://github.com/user-attachments/assets/733afb94-a251-4a6d-86a4-3a124e8c3469)
-![Screenshot 2024-08-24 195106](https://github.com/user-attachments/assets/ef09886f-7936-4ef7-b01e-4da0008fd047) 
-![Screenshot 2024-08-24 195121](https://github.com/user-attachments/assets/219272b8-3938-4b7f-ba78-817e507beee9)
-![Screenshot 2024-10-03 093051](https://github.com/user-attachments/assets/d4da51a4-dfe8-4cc1-ae49-745f6e1ae17a) 
-![Screenshot 2024-10-03 093106](https://github.com/user-attachments/assets/09c31cf7-e960-4ea5-a858-8807317486b7)
-![Screenshot 2024-10-03 093133](https://github.com/user-attachments/assets/b1da1faa-7e71-49be-972a-432029a1e7c3) 
-![Screenshot 2024-10-03 093424](https://github.com/user-attachments/assets/b0a9a1e2-6018-475a-95fc-d64980677ee7) 
-![Screenshot 2024-10-03 093437](https://github.com/user-attachments/assets/b860f905-2c35-4af3-9df8-38cda70b4406)
+While the backend drives the logic, the frontend utilizes modern design principles:
 
-## Project Structure
+- **Masonry Gallery**: A high-density grid showcasing 30+ food items with staggered CSS columns.
+- **Glassmorphism**: Sleek overlay effects for premium readability.
+- **Scroll Reveal**: Cinematic entry animations for all major landing page sections.
+- **Fluid Typography**: Responsive scaling across all devices using CSS `clamp()`.
+
+---
+
+## 🛠️ Setup & Local Deployment
+
+### 1. Database Initialization
+
+Create a MySQL database named `foodfrenzy_db`.
+
+### 2. Environment Configuration
+
+Configure your credentials in a `.env` file or export them:
 
 ```bash
-src/
-├── main/
-│   ├── java/
-│   │   └── com.example.foodfrenzy/
-│   │       ├── controller/      # Contains all controllers
-│   │       ├── model/           # Contains entity classes
-│   │       ├── repository/      # Repository interfaces for database interaction
-│   │       └── service/         # Service layer with business logic
-│   ├── resources/
-│   │   ├── templates/           # Thymeleaf templates for views
-│   │   ├── static/              # Static assets (CSS, JavaScript)
-│   │   └── application.properties  # Project configuration
-│   └── webapp/
-│       └── WEB-INF/
-│           └── views/           # Additional view files
-└── test/                        # Test cases for unit testing
+export DB_URL=jdbc:mysql://localhost:3306/foodfrenzy_db
+export DB_USERNAME=your_username
+export DB_PASSWORD=your_password
+```
+
+### 3. Build & Run
+
+```bash
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+Access the dashboard at `http://localhost:8080`
+
+---
+
+## 📂 Project Structure
+
+```text
+src/main/java/com/example/demo/
+├── config/       # Security, OAuth2, and Bean configurations
+├── controllers/  # REST & MVC Controllers (Admin, User, Registration)
+├── dto/          # Data Transfer Objects for secure communication
+├── entities/     # JPA Hibernate Database Models
+├── repository/   # Spring Data JPA interfaces
+└── services/     # Business logic and Core Services
+```

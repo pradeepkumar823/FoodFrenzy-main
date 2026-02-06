@@ -20,88 +20,175 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
       "
     >
       <div
         class="card glass-card text-center"
         style="
-          max-width: 500px;
-          padding: 4rem;
+          max-width: 550px;
+          padding: 3rem;
           border-top: 6px solid var(--success);
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         "
       >
         <div
           style="
-            font-size: 5rem;
-            margin-bottom: 2rem;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
             animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: var(--success);
           "
         >
           <i class="fa-solid fa-circle-check"></i>
         </div>
-        <h1 style="color: var(--secondary); margin-bottom: 0.5rem">
-          Deliciousness is coming!
-        </h1>
-        <p class="text-muted mb-3">
-          Your order has been placed successfully. Our chefs are already
-          cooking!
-        </p>
-
-        <div
-          class="p-3 mb-4"
+        <h1
           style="
-            text-align: left;
-            background: #fafafa;
-            border-radius: var(--radius-md);
-            border: 1px dashed #ddd;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
           "
         >
-          <h3
-            class="mb-2"
-            style="
-              font-size: 1.1rem;
-              text-transform: uppercase;
-              letter-spacing: 0.1em;
-              color: var(--text-muted);
-            "
-          >
-            Receipt Summary
-          </h3>
+          Order Confirmed!
+        </h1>
+        <p class="text-muted mb-3" style="font-size: 1.1rem">
+          Deliciousness is heading your way. Your order has been registered in
+          our kitchen!
+        </p>
+
+        <!-- Professional Receipt Slip -->
+        <div
+          class="receipt-slip p-3 mb-4"
+          style="
+            text-align: left;
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid #eee;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+          "
+        >
           <div
             style="
               display: flex;
               justify-content: space-between;
-              margin-bottom: 0.8rem;
-              padding-bottom: 0.8rem;
-              border-bottom: 1px solid #eee;
+              align-items: center;
+              border-bottom: 2px dashed #eee;
+              padding-bottom: 1rem;
+              margin-bottom: 1rem;
             "
           >
-            <span class="text-muted">Total Paid:</span>
-            <strong style="color: var(--primary); font-size: 1.3rem"
-              >₹<span th:text="${amount}">0.00</span></strong
+            <h3
+              style="
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                color: var(--text-muted);
+                margin: 0;
+              "
+            >
+              Order Receipt
+            </h3>
+            <small
+              class="text-muted"
+              th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy, HH:mm')}"
+              >Date</small
             >
           </div>
+
+          <!-- Item Details -->
+          <div th:if="${order != null}">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0.5rem;
+              "
+            >
+              <span
+                style="font-weight: 600; font-size: 1.1rem"
+                th:text="${order.productName}"
+                >Dish Name</span
+              >
+              <span style="font-weight: 600"
+                >₹<span th:text="${order.totalAmount}">0.00</span></span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.9rem;
+                color: var(--text-muted);
+                margin-bottom: 1rem;
+              "
+            >
+              <span
+                >Quantity: <span th:text="${order.quantity}">1</span> x ₹<span
+                  th:text="${order.unitPrice}"
+                  >0.00</span
+                ></span
+              >
+              <span>Confirmed</span>
+            </div>
+
+            <div
+              style="
+                background: rgba(var(--secondary-rgb), 0.05);
+                padding: 0.8rem;
+                border-radius: var(--radius-sm);
+                font-size: 0.85rem;
+                border-left: 3px solid var(--secondary);
+              "
+            >
+              <i class="fa-solid fa-truck-fast"></i>
+              <strong>Estimated:</strong> 25-30 Mins
+            </div>
+          </div>
+
+          <div
+            th:unless="${order != null}"
+            style="padding: 1rem; text-align: center; color: var(--danger)"
+          >
+            <i class="fa-solid fa-triangle-exclamation"></i> Detailed receipt
+            unavailable. Total: ₹<span th:text="${amount}">0.00</span>
+          </div>
+
+          <!-- Total Highlight -->
           <div
             style="
+              margin-top: 1.5rem;
+              padding-top: 1rem;
+              border-top: 2px dashed #eee;
               display: flex;
               justify-content: space-between;
-              font-size: 0.9rem;
+              align-items: center;
             "
           >
-            <span class="text-muted">Estimated Delivery:</span>
-            <span class="badge badge-info">30 Minutes</span>
+            <span style="font-weight: 700; font-size: 1.2rem">Total Paid:</span>
+            <span
+              style="color: var(--primary); font-size: 1.8rem; font-weight: 800"
+              >₹<span th:text="${amount}">0.00</span></span
+            >
           </div>
         </div>
 
-        <div style="display: grid; gap: 1rem">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1rem">
           <a
             th:href="@{/profile}"
             class="btn btn-primary"
-            style="background: var(--primary); color: white"
-            ><i class="fa-solid fa-clock-rotate-left"></i> View Order History</a
+            style="
+              width: 100%;
+              border-radius: var(--radius-lg);
+              font-weight: 600;
+            "
+            ><i class="fa-solid fa-clock-rotate-left"></i> Track in Order
+            History</a
           >
-          <a th:href="@{/products}" class="btn secondary"
+          <a
+            th:href="@{/products}"
+            class="btn secondary"
+            style="width: 100%; border-radius: var(--radius-lg)"
             ><i class="fa-solid fa-burger"></i> Order More Food</a
           >
         </div>
@@ -121,5 +208,6 @@
         }
       }
     </style>
+    <div th:replace="~{Navigation :: footer}"></div>
   </body>
 </html>

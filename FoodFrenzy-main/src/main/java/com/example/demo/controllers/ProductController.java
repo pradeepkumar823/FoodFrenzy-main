@@ -116,6 +116,7 @@ public class ProductController {
 
 			orderServices.saveOrder(loggedInUser, order);
 
+			model.addAttribute("order", OrderDTO.fromEntity(order));
 			model.addAttribute("amount", totalAmount);
 			return "Order_success";
 		} catch (Exception e) {
