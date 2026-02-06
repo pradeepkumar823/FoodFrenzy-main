@@ -1,10 +1,12 @@
 package com.example.demo.dto;
+
 public class OrderRequestDTO {
     private Long userId;
     private Long productId;
     private String productName;
     private Double price;
     private Integer quantity;
+    private String productDescription;
 
     public Long getUserId() {
         return userId;
@@ -44,5 +46,13 @@ public class OrderRequestDTO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 }

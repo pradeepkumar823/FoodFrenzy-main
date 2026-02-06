@@ -22,44 +22,88 @@
         justify-content: center;
       "
     >
-      <div class="card text-center" style="max-width: 500px; padding: 3rem">
+      <div
+        class="card glass-card text-center"
+        style="
+          max-width: 500px;
+          padding: 4rem;
+          border-top: 6px solid var(--success);
+        "
+      >
         <div
           style="
             font-size: 5rem;
-            margin-bottom: 1rem;
-            animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 2rem;
+            animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--success);
           "
         >
-          🎉
+          <i class="fa-solid fa-circle-check"></i>
         </div>
-        <h1 style="color: var(--success); border: none">Order Successful!</h1>
-        <p class="text-muted mb-2">
-          Thank you for your order. Your food is being prepared with love.
+        <h1 style="color: var(--secondary); margin-bottom: 0.5rem">
+          Deliciousness is coming!
+        </h1>
+        <p class="text-muted mb-3">
+          Your order has been placed successfully. Our chefs are already
+          cooking!
         </p>
 
-        <div class="p-2 bg-light border rounded mb-3" style="text-align: left">
-          <h3 class="mb-1" style="font-size: 1.2rem">Order Summary</h3>
+        <div
+          class="p-3 mb-4"
+          style="
+            text-align: left;
+            background: #fafafa;
+            border-radius: var(--radius-md);
+            border: 1px dashed #ddd;
+          "
+        >
+          <h3
+            class="mb-2"
+            style="
+              font-size: 1.1rem;
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+              color: var(--text-muted);
+            "
+          >
+            Receipt Summary
+          </h3>
           <div
             style="
               display: flex;
               justify-content: space-between;
-              margin-bottom: 0.5rem;
+              margin-bottom: 0.8rem;
+              padding-bottom: 0.8rem;
+              border-bottom: 1px solid #eee;
             "
           >
-            <span>Total Amount:</span>
-            <strong style="color: var(--primary)"
+            <span class="text-muted">Total Paid:</span>
+            <strong style="color: var(--primary); font-size: 1.3rem"
               >₹<span th:text="${amount}">0.00</span></strong
             >
           </div>
-          <div style="display: flex; justify-content: space-between">
-            <span>Est. Delivery:</span>
-            <strong>~30 mins</strong>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              font-size: 0.9rem;
+            "
+          >
+            <span class="text-muted">Estimated Delivery:</span>
+            <span class="badge badge-info">30 Minutes</span>
           </div>
         </div>
 
         <div style="display: grid; gap: 1rem">
-          <a th:href="@{/products}" class="btn btn-primary">Order More</a>
-          <a th:href="@{/home}" class="btn secondary">Go to Home</a>
+          <a
+            th:href="@{/profile}"
+            class="btn btn-primary"
+            style="background: var(--primary); color: white"
+            ><i class="fa-solid fa-clock-rotate-left"></i> View Order History</a
+          >
+          <a th:href="@{/products}" class="btn secondary"
+            ><i class="fa-solid fa-burger"></i> Order More Food</a
+          >
         </div>
       </div>
     </div>

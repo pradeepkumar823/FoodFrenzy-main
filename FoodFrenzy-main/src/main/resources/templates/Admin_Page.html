@@ -30,6 +30,13 @@
           <p class="text-muted">
             Manage your users, products, and platform metrics.
           </p>
+          <small class="text-muted"
+            ><i class="fa-regular fa-clock"></i> Last updated:
+            <span
+              th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"
+              >Time</span
+            ></small
+          >
         </div>
         <div>
           <a th:href="@{/home}" class="btn secondary small"
@@ -75,7 +82,11 @@
           >
             📦
           </div>
-          <span class="stat-number">0</span>
+          <span
+            class="stat-number"
+            th:text="${orders != null ? orders.size() : 0}"
+            >0</span
+          >
           <p class="text-muted">Total Orders</p>
         </div>
         <div class="stat-card">
@@ -125,6 +136,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -134,6 +146,13 @@
                     <td th:text="${user.userName}">Name</td>
                     <td th:text="${user.userEmail}">Email</td>
                     <td th:text="${user.userPhoneNumber}">Phone</td>
+                    <td>
+                      <span
+                        th:class="${user.verified ? 'badge badge-success' : 'badge badge-warning'}"
+                        th:text="${user.verified ? 'Verified' : 'Pending'}"
+                        >Status</span
+                      >
+                    </td>
                     <td>
                       <a
                         th:href="@{/admin/updateUser/{userId}(userId=${user.userId})}"
@@ -290,6 +309,88 @@
                 class="p-3 text-center text-muted"
               >
                 No admins found.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section class="mb-3">
+          <div class="card p-0">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #eee">
+              <h2 style="margin: 0; font-size: 1.5rem">Order Management</h2>
+            </div>
+            <div class="table-container" style="box-shadow: none">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Contact</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="order : ${orders}">
+                    <td th:text="${order.orderId}">#</td>
+                    <td>
+                      <div th:if="${order.user != null}">
+                        <strong th:text="${order.user.userName}">Name</strong
+                        ><br />
+                        <small
+                          class="text-muted"
+                          th:text="'UID: ' + ${order.user.userId}"
+                          >ID</small
+                        >
+                      </div>
+                      <div th:unless="${order.user != null}" class="text-muted">
+                        Deleted User
+                      </div>
+                    </td>
+                    <td>
+                      <div th:if="${order.user != null}">
+                        <small th:text="${order.user.userEmail}">Email</small
+                        ><br />
+                        <small
+                          class="text-muted"
+                          th:text="${order.user.userPhoneNumber}"
+                          >Phone</small
+                        >
+                      </div>
+                    </td>
+                    <td>
+                      <strong th:text="${order.orderName}">Product</strong
+                      ><br />
+                      <small
+                        class="text-muted"
+                        th:text="'₹' + ${order.orderPrice} + ' per unit'"
+                      ></small>
+                    </td>
+                    <td th:text="${order.orderQuantity}">1</td>
+                    <td style="color: var(--primary); font-weight: bold">
+                      ₹<span th:text="${order.orderTotalAmount}">0</span>
+                    </td>
+                    <td>
+                      <small
+                        th:text="${#dates.format(order.orderDate, 'dd-MMM-yyyy HH:mm')}"
+                        >Date</small
+                      >
+                    </td>
+                    <td>
+                      <span class="badge badge-success">Confirmed</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                th:if="${orders == null or orders.isEmpty()}"
+                class="p-3 text-center text-muted"
+              >
+                No orders placed yet.
               </div>
             </div>
           </div>

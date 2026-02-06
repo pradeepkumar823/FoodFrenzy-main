@@ -16,78 +16,605 @@
 
     <!-- Hero Section -->
     <header class="hero animate-fade">
-      <div class="container">
-        <h1 th:if="${user != null}">
+      <div
+        class="container"
+        style="
+          background: rgba(0, 0, 0, 0.2);
+          padding: 3rem;
+          border-radius: var(--radius-lg);
+          backdrop-filter: blur(5px);
+        "
+      >
+        <h1 th:if="${user != null}" style="color: white">
           Welcome back,
           <span
             th:text="${role == 'ADMIN' ? user.getAdminName() : user.getUserName()}"
             >User</span
           >!
         </h1>
-        <h1 th:unless="${user != null}">Craving Something Delicious?</h1>
+        <h1 th:unless="${user != null}" style="color: white">
+          Taste the Magic of FoodFrenzy
+        </h1>
 
-        <p th:if="${user != null}">
-          Ready for another feast? Explore our latest menu additions.
+        <p th:if="${user != null}" style="color: white; opacity: 1">
+          Your favorites are waiting. Explore our gourmet collection today.
         </p>
-        <p th:unless="${user != null}">
-          Experience the best food delivery service in town. Fresh, fast, and
-          delivered right to your doorstep.
+        <p th:unless="${user != null}" style="color: white; opacity: 1">
+          From traditional biryanis to modern chinese, we bring the world's best
+          flavors right to your doorstep, fast and fresh.
         </p>
 
         <div class="mt-2">
-          <a th:href="@{/products}" class="btn btn-primary">
-            <i class="fa-solid fa-utensils"></i> Order Now
+          <a
+            th:href="@{/products}"
+            class="btn btn-primary"
+            style="background: white; color: var(--primary)"
+          >
+            <i class="fa-solid fa-utensils"></i> Start Ordering
           </a>
           <a
             th:href="@{/about}"
             class="btn secondary"
-            style="margin-left: 1rem; background: rgba(255, 255, 255, 0.2)"
+            style="
+              margin-left: 1rem;
+              background: rgba(255, 255, 255, 0.2);
+              color: white;
+              border: 1px solid white;
+            "
           >
-            Learn More
+            Our Story
           </a>
         </div>
       </div>
     </header>
 
-    <div class="container text-center mb-3">
+    <!-- Social Proof Bar -->
+    <section class="container reveal">
+      <div class="social-proof">
+        <div class="stat-item">
+          <h2>10k+</h2>
+          <p class="text-muted">Happy Foodies</p>
+        </div>
+        <div class="stat-item">
+          <h2>50+</h2>
+          <p class="text-muted">Expert Chefs</p>
+        </div>
+        <div class="stat-item">
+          <h2>30min</h2>
+          <p class="text-muted">Avg. Delivery</p>
+        </div>
+        <div class="stat-item">
+          <h2>4.8★</h2>
+          <p class="text-muted">User Rating</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="container mt-3 reveal">
+      <div class="text-center mb-2">
+        <h2>Explore Categories</h2>
+        <p class="text-muted">Discover your favorite cuisines</p>
+      </div>
+      <div class="category-grid">
+        <a th:href="@{/products}" class="category-card">
+          <img
+            th:src="@{/images/biryani/Biryani_of_Hyderabadi.jpg}"
+            alt="Biryani"
+          />
+          <div class="category-overlay">
+            <h3>Biryani Specials</h3>
+            <small>Authentic Hyderabadi & Dum Biryani</small>
+          </div>
+        </a>
+        <a th:href="@{/products}" class="category-card">
+          <img
+            th:src="@{/images/chinese/Fried-rice-manchurian.jpg}"
+            alt="Chinese"
+          />
+          <div class="category-overlay">
+            <h3>Chinese Cravings</h3>
+            <small>Manchurian, Chowmein & More</small>
+          </div>
+        </a>
+        <a th:href="@{/products}" class="category-card">
+          <img
+            th:src="@{/images/paneer/paneer-butter-masala.jpg}"
+            alt="Paneer"
+          />
+          <div class="category-overlay">
+            <h3>Paneer Delight</h3>
+            <small>Rich & Creamy North Indian Classics</small>
+          </div>
+        </a>
+        <a th:href="@{/products}" class="category-card">
+          <img
+            th:src="@{/images/north-india-food/chola-bhatura.jpg}"
+            alt="North Indian"
+          />
+          <div class="category-overlay">
+            <h3>North Indian</h3>
+            <small>Flavors from the Heart of India</small>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Full Culinary Collection (The Mega Gallery) -->
+    <section class="container mt-3 reveal">
+      <div class="text-center mb-2">
+        <span class="badge badge-info">Our Full Library</span>
+        <h2 class="mt-1">The Full Culinary Collection</h2>
+        <p class="text-muted">
+          Every dish is a masterpiece, crafted for your satisfaction.
+        </p>
+      </div>
+
+      <div class="mega-gallery">
+        <!-- Biryani -->
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/biryani/Biryani_of_Hyderabadi.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Hyderabadi Biryani</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/biryani/Dum-Biryani.jfif}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Special Dum Biryani</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/biryani/Egg-biryani.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Egg Biryani</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/biryani/Lucknowi-biryani.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Lucknowi Biryani</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/biryani/egg-dum-biryani.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Egg Dum Biryani</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/biryani/kolkata biryani.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Kolkata Special</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/biryani/veg-biryani.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Veg Biryani</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/biryani/veg-dum-biryani.jpeg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Veg Dum Biryani</div>
+        </div>
+
+        <!-- Chicken -->
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chicken/Afgani-chicken-curry.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Afgani Chicken</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chicken/Matka-Chicken.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Matka Chicken</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chicken/Tandoori-chicken-tikka.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Chicken Tikka</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chicken/butter-chicken.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Butter Chicken</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chicken/chicken-karahi-kadai.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Chicken Karahi</div>
+        </div>
+
+        <!-- Chinese -->
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chinese/Fried-rice-manchurian.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Manchurian Rice</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chinese/chilli-Paneer.jfif}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Chilli Paneer</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chinese/chowmein.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Spicy Chowmein</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/chinese/momo.webp}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Steamed Momos</div>
+        </div>
+
+        <!-- North Indian -->
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/north-india-food/Gulab Jamun.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Gulab Jamun</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/north-india-food/Honey-Chilli-Potato.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Honey Chilli Potato</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/north-india-food/Khir.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Traditional Khir</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/north-india-food/Laccha-Paratha.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Laccha Paratha</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/north-india-food/Soya-Chaap.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Soya Chaap</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/north-india-food/chola-bhatura.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Chola Bhatura</div>
+        </div>
+
+        <!-- Paneer -->
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/paneer/Kadai-Paneer.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Kadai Paneer</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/paneer/Matar-Paneer.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Matar Paneer</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/paneer/paneer-butter-masala.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Paneer Butter</div>
+        </div>
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/paneer/paneer-do-pyaza.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Paneer Do Pyaza</div>
+        </div>
+
+        <!-- Others -->
+        <div class="gallery-item">
+          <img
+            th:src="@{/images/vegetable/veg.jpg}"
+            alt="Food"
+            loading="lazy"
+          />
+          <div class="item-caption">Veg Special</div>
+        </div>
+        <div class="gallery-item">
+          <img th:src="@{/images/final.jpg}" alt="Food" loading="lazy" />
+          <div class="item-caption">Chef Signature</div>
+        </div>
+        <div class="gallery-item">
+          <img th:src="@{/images/final2.jpg}" alt="Food" loading="lazy" />
+          <div class="item-caption">Gourmet Selection</div>
+        </div>
+        <div class="gallery-item">
+          <img th:src="@{/images/final3.jpg}" alt="Food" loading="lazy" />
+          <div class="item-caption">Premium Plate</div>
+        </div>
+        <div class="gallery-item">
+          <img th:src="@{/images/TEA.jpg}" alt="Food" loading="lazy" />
+          <div class="item-caption">Masala Chai</div>
+        </div>
+        <div class="gallery-item">
+          <img th:src="@{/images/TEA2.jpg}" alt="Food" loading="lazy" />
+          <div class="item-caption">Ginger Tea</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="container mt-3 reveal">
+      <div class="text-center mb-2">
+        <h2>What Our Foodies Say</h2>
+        <p class="text-muted">Real stories from real customers</p>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <p class="text-muted">
+            "The Lucknowi Biryani is absolutely divine. It's rare to find such
+            authentic taste in delivery food."
+          </p>
+          <div class="user-meta">
+            <img
+              th:src="@{/images/suhas.jpeg}"
+              class="user-avatar"
+              alt="Anjali Sharma"
+            />
+            <div>
+              <strong style="display: block">Anjali Sharma</strong>
+              <small class="text-muted">Daily Foodie</small>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="text-muted">
+            "Super fast delivery! My food arrived piping hot within 25 minutes.
+            Highly professional service."
+          </p>
+          <div class="user-meta">
+            <img
+              th:src="@{/images/pro.jpg}"
+              class="user-avatar"
+              alt="Rajesh Kumar"
+            />
+            <div>
+              <strong style="display: block">Rajesh Kumar</strong>
+              <small class="text-muted">Tech Professional</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Dishes Showcase -->
+    <section
+      class="container mt-3 reveal"
+      style="background: white; border-radius: var(--radius-lg); padding: 3rem"
+    >
+      <div class="text-center mb-2">
+        <span class="badge badge-primary">Top Rated</span>
+        <h2 class="mt-1">Most Popular This Week</h2>
+        <p class="text-muted">The dishes our community can't get enough of</p>
+      </div>
+      <div class="showcase-grid">
+        <div class="showcase-card">
+          <div class="showcase-img">
+            <img
+              th:src="@{/images/biryani/Lucknowi-biryani.jpg}"
+              alt="Biryani"
+            />
+          </div>
+          <div class="showcase-content">
+            <h4>Lucknowi Biryani</h4>
+            <p class="text-muted small">Fragrant, mild and full of flavor.</p>
+            <div
+              style="
+                color: var(--primary);
+                font-weight: bold;
+                margin-top: 0.5rem;
+              "
+            >
+              ₹350
+            </div>
+          </div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-img">
+            <img th:src="@{/images/chinese/chowmein.jpg}" alt="Chowmein" />
+          </div>
+          <div class="showcase-content">
+            <h4>Spicy Chowmein</h4>
+            <p class="text-muted small">
+              Wok-tossed noodles with fresh veggies.
+            </p>
+            <div
+              style="
+                color: var(--primary);
+                font-weight: bold;
+                margin-top: 0.5rem;
+              "
+            >
+              ₹180
+            </div>
+          </div>
+        </div>
+        <div class="showcase-card">
+          <div class="showcase-img">
+            <img
+              th:src="@{/images/north-india-food/Gulab Jamun.jpg}"
+              alt="Dessert"
+            />
+          </div>
+          <div class="showcase-content">
+            <h4>Gulab Jamun</h4>
+            <p class="text-muted small">Classic Indian dessert, served warm.</p>
+            <div
+              style="
+                color: var(--primary);
+                font-weight: bold;
+                margin-top: 0.5rem;
+              "
+            >
+              ₹90
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container text-center mb-3 reveal">
       <h2>Why FoodFrenzy?</h2>
       <p class="text-muted">We deliver more than just food.</p>
     </div>
 
     <!-- Features Section -->
-    <section class="features">
+    <section class="features reveal">
       <div class="feature-card">
         <div class="feature-icon">🚚</div>
         <h3>Super Fast Delivery</h3>
-        <p class="text-muted">
-          Hungry? Don't wait! We deliver your favorite meals hot and fresh
-          within 30 minutes.
-        </p>
+        <p class="text-muted">Hot and fresh within 30 minutes.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🥗</div>
         <h3>Fresh Ingredients</h3>
-        <p class="text-muted">
-          We use only the finest, locally sourced ingredients to ensure every
-          bite is healthy and delicious.
-        </p>
+        <p class="text-muted">Finest, locally sourced ingredients.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">💰</div>
         <h3>Best Offers</h3>
-        <p class="text-muted">
-          Enjoy premium quality food at unbeatable prices with our daily deals
-          and exclusive discounts.
-        </p>
+        <p class="text-muted">Daily deals and exclusive discounts.</p>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-      <p>
-        &copy; 2026 FoodFrenzy. Made with
-        <span style="color: var(--primary)">❤️</span> for foodies.
-      </p>
+    <!-- Professional Footer -->
+    <footer class="footer-pro">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 class="logo" style="color: white; margin-bottom: 1rem">
+            🍕 FoodFrenzy
+          </h4>
+          <p>
+            Delivering deliciousness since 2024. Your satisfaction is our
+            primary recipe.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a th:href="@{/home}">Home</a></li>
+            <li><a th:href="@{/products}">Menu</a></li>
+            <li><a th:href="@{/about}">About Us</a></li>
+            <li><a th:href="@{/location}">Locations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Customer Care</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Safety Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Follow Us</h4>
+          <div style="display: flex; gap: 1rem; font-size: 1.5rem">
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          &copy; 2026 FoodFrenzy. Crafted with
+          <span style="color: var(--primary)">❤️</span> for foodies.
+        </p>
+      </div>
     </footer>
+
+    <!-- Scroll Reveal Script -->
+    <script>
+      function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+          var windowHeight = window.innerHeight;
+          var elementTop = reveals[i].getBoundingClientRect().top;
+          var elementVisible = 100;
+          if (elementTop < windowHeight - elementVisible) {
+            reveals[i].classList.add("active");
+          }
+        }
+      }
+      window.addEventListener("scroll", reveal);
+      reveal();
+    </script>
   </body>
 </html>

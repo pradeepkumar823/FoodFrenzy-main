@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.entities.*;
 import com.example.demo.services.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,7 +24,10 @@ public class AdminController {
 	private OrderServices orderServices;
 
 	@GetMapping("/services")
-	public String returnBack(Model model) {
+	public String returnBack(HttpSession session, Model model) {
+		if (!"ADMIN".equals(session.getAttribute("role"))) {
+			return "redirect:/login?error=Access Denied";
+		}
 		List<User> users = this.services.getAllUser();
 		List<Admin> admins = this.adminServices.getAll();
 		List<Product> products = this.productServices.getAllProducts();
@@ -105,7 +109,10 @@ public class AdminController {
 	}
 
 	@GetMapping("/services/data")
-	public String adminServices(Model model) {
+	public String adminServices(HttpSession session, Model model) {
+		if (!"ADMIN".equals(session.getAttribute("role"))) {
+			return "redirect:/login?error=Access Denied";
+		}
 		try {
 			List<Product> products = productServices.getAllProducts();
 			model.addAttribute("products", products);
@@ -115,6 +122,9 @@ public class AdminController {
 
 			List<Admin> admins = adminServices.getAll();
 			model.addAttribute("admins", admins);
+
+			List<Orders> orders = orderServices.getOrders();
+			model.addAttribute("orders", orders);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

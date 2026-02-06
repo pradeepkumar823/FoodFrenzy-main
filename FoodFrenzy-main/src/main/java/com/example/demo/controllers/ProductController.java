@@ -12,6 +12,7 @@ import com.example.demo.dto.*;
 import com.example.demo.entities.*;
 import com.example.demo.services.*;
 import org.springframework.ui.Model;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ProductController {
@@ -19,11 +20,9 @@ public class ProductController {
 	private ProductServices productServices;
 	@Autowired
 	private OrderServices orderServices;
-	@Autowired
-	private UserServices userServices;
 
-	private Long currentUserId;
-	private String currentUserToken;
+	@Autowired
+	private HttpSession session;
 
 	@GetMapping("/product")
 	public String product(Model model) {
@@ -37,6 +36,10 @@ public class ProductController {
 		this.productServices.addProduct(product);
 		return "redirect:/admin/services";
 	}
+
+	// The @ModelAttribute is one of the most powerful and "magical" annotations in
+	// Spring Boot.
+	// It works like a bridge between your HTML User Interface and your Java Code.
 
 	// UpdateProduct
 	@GetMapping("/updatingProduct/{productId}")
@@ -63,10 +66,13 @@ public class ProductController {
 				model.addAttribute("product", product);
 				model.addAttribute("order", new OrderRequestDTO());
 
-				// Get user orders if logged in
-				if (currentUserId != null) {
+				// Get user orders if logged in as CUSTOMER
+				Object userObj = session.getAttribute("loggedInUser");
+				String role = (String) session.getAttribute("role");
+				if (userObj != null && "USER".equals(role)) {
+					User loggedInUser = (User) userObj;
 					try {
-						List<OrderDTO> orders = orderServices.getOrdersByUserId(currentUserId.intValue())
+						List<OrderDTO> orders = orderServices.getOrdersByUserId(loggedInUser.getUserId())
 								.stream()
 								.map(OrderDTO::fromEntity)
 								.collect(Collectors.toList());
@@ -88,22 +94,27 @@ public class ProductController {
 	}
 
 	@PostMapping("/product/order")
-	public String orderHandler(@ModelAttribute OrderRequestDTO orderRequest, Model model) {
-		if (currentUserId == null || currentUserToken == null) {
-			return "redirect:/login";
+	public String orderHandler(@ModelAttribute OrderRequestDTO orderRequest, HttpSession session, Model model) {
+		Object userObj = session.getAttribute("loggedInUser");
+		String role = (String) session.getAttribute("role");
+
+		if (userObj == null || !"USER".equals(role)) {
+			return "redirect:/login?error=Please login as a Customer to place orders";
 		}
+
+		User loggedInUser = (User) userObj;
 		try {
 			Orders order = new Orders();
 			order.setOrderName(orderRequest.getProductName());
 			order.setOrderPrice(orderRequest.getPrice());
 			order.setOrderQuantity(orderRequest.getQuantity());
+			order.setOrderDescription(orderRequest.getProductDescription());
 
 			double totalAmount = orderRequest.getPrice() * orderRequest.getQuantity();
 			order.setOrderTotalAmount(totalAmount);
 			order.setOrderDate(new Date());
 
-			User user = userServices.getUser(currentUserId.intValue());
-			orderServices.saveOrder(user, order);
+			orderServices.saveOrder(loggedInUser, order);
 
 			model.addAttribute("amount", totalAmount);
 			return "Order_success";
@@ -116,8 +127,11 @@ public class ProductController {
 
 	@GetMapping("/back")
 	public String back(Model model) {
-		if (currentUserId != null) {
-			List<OrderDTO> orders = orderServices.getOrdersByUserId(currentUserId.intValue())
+		Object userObj = session.getAttribute("loggedInUser");
+		String role = (String) session.getAttribute("role");
+		if (userObj != null && "USER".equals(role)) {
+			User loggedInUser = (User) userObj;
+			List<OrderDTO> orders = orderServices.getOrdersByUserId(loggedInUser.getUserId())
 					.stream()
 					.map(OrderDTO::fromEntity)
 					.collect(Collectors.toList());
@@ -125,11 +139,6 @@ public class ProductController {
 		}
 		model.addAttribute("order", new OrderRequestDTO());
 		return "BuyProduct";
-	}
-
-	public void setCurrentUser(Long userId, String token) {
-		this.currentUserId = userId;
-		this.currentUserToken = token;
 	}
 
 	@GetMapping("/addProduct")

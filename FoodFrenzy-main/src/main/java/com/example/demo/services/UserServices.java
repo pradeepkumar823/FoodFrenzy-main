@@ -60,10 +60,9 @@ public class UserServices {
 			user.setUserEmail(EmailNormalizer.normalize(user.getUserEmail()));
 		}
 
-		// Generate verification code for email verification
-		String verificationCode = UUID.randomUUID().toString();
-		user.setVerificationCode(verificationCode);
-		user.setVerified(false); // Requires email verification
+		// Users are now auto-verified upon registration
+		user.setVerificationCode(null);
+		user.setVerified(true);
 
 		this.userRepository.save(user);
 	}
@@ -73,9 +72,6 @@ public class UserServices {
 			return false;
 		User user = this.userRepository.findByUserEmailIgnoreCase(EmailNormalizer.normalize(email)).orElse(null);
 		if (user != null) {
-			if (!user.isVerified()) {
-				return false; // Not verified
-			}
 			// Use passwordEncoder.matches() for secure comparison
 			return passwordEncoder.matches(password, user.getUserPassword());
 		}

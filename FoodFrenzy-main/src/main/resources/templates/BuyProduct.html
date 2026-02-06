@@ -80,6 +80,11 @@
               th:field="*{price}"
               th:value="${product.productPrice}"
             />
+            <input
+              type="hidden"
+              th:field="*{productDescription}"
+              th:value="${product.productDescription}"
+            />
 
             <div class="form-group">
               <label>Quantity</label>

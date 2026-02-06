@@ -20,6 +20,8 @@ public class Orders {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDate;
 	private double orderTotalAmount;
+	@Column(length = 1000)
+	private String orderDescription;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -28,11 +30,13 @@ public class Orders {
 	public Orders() {
 	}
 
-	public Orders(String orderName, double orderPrice, int orderQuantity, double orderTotalAmount, User user) {
+	public Orders(String orderName, double orderPrice, int orderQuantity, double orderTotalAmount,
+			String orderDescription, User user) {
 		this.orderName = orderName;
 		this.orderPrice = orderPrice;
 		this.orderQuantity = orderQuantity;
 		this.orderTotalAmount = orderTotalAmount;
+		this.orderDescription = orderDescription;
 		this.user = user;
 	}
 
@@ -82,6 +86,14 @@ public class Orders {
 
 	public void setOrderTotalAmount(double orderTotalAmount) {
 		this.orderTotalAmount = orderTotalAmount;
+	}
+
+	public String getOrderDescription() {
+		return orderDescription;
+	}
+
+	public void setOrderDescription(String orderDescription) {
+		this.orderDescription = orderDescription;
 	}
 
 	public User getUser() {

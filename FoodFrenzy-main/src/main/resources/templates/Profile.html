@@ -135,6 +135,68 @@
             </a>
           </div>
         </div>
+
+        <!-- Order History Section -->
+        <div
+          th:if="${orders != null and !orders.isEmpty()}"
+          class="mt-4 animate-fade"
+        >
+          <h2 class="mb-3">
+            <i class="fa-solid fa-clock-rotate-left"></i> Your Order History
+          </h2>
+          <div class="card p-0" style="overflow: hidden">
+            <div class="table-container">
+              <table class="table" style="margin-bottom: 0">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="order : ${orders}">
+                    <td th:text="'#' + ${order.orderId}">#</td>
+                    <td>
+                      <strong th:text="${order.productName}">Product</strong>
+                    </td>
+                    <td>
+                      <small
+                        class="text-muted"
+                        th:text="${order.orderDescription}"
+                        >Desc</small
+                      >
+                    </td>
+                    <td th:text="'₹' + ${order.unitPrice}">₹0</td>
+                    <td th:text="${order.quantity}">1</td>
+                    <td>
+                      <span
+                        style="color: var(--primary); font-weight: bold"
+                        th:text="'₹' + ${order.totalAmount}"
+                        >₹0</span
+                      >
+                    </td>
+                    <td>
+                      <small th:text="${order.orderDate}">Date</small>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div
+          th:if="${orders == null or orders.isEmpty()}"
+          class="text-center mt-4"
+        >
+          <p class="text-muted">You haven't placed any orders yet.</p>
+          <a th:href="@{/products}" class="btn btn-primary small">Order Now</a>
+        </div>
       </div>
     </div>
 
@@ -166,14 +228,8 @@
           >
         </div>
         <div
-          style="
-            width: 1px;
-            background: #eee;
-            display: none;
-            @media (min-width: 768px) {
-              display: block;
-            }
-          "
+          class="profile-divider"
+          style="width: 1px; background: #eee; display: none"
         ></div>
         <div style="flex: 1; min-width: 250px">
           <h3>New here?</h3>

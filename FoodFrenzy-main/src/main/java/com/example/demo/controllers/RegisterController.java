@@ -19,7 +19,6 @@ import com.example.demo.dto.UserDTO;
 import com.example.demo.entities.Admin;
 import com.example.demo.entities.User;
 import com.example.demo.services.AdminServices;
-import com.example.demo.services.EmailService;
 import com.example.demo.services.UserServices;
 import com.example.demo.utils.EmailNormalizer;
 
@@ -37,9 +36,6 @@ public class RegisterController {
 
     @Autowired
     private AdminServices adminServices;
-
-    @Autowired
-    private EmailService emailService;
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") UserDTO userDto,
@@ -100,26 +96,8 @@ public class RegisterController {
                     userServices.addUser(user);
                 }
 
-                // Send verification email - retrieve user from DB (lookup by normalized email)
-                try {
-                    User savedUser = userServices.getUserByEmail(normalizedEmail);
-                    if (savedUser != null && savedUser.getVerificationCode() != null) {
-                        emailService.sendVerificationEmail(
-                                savedUser.getUserEmail(),
-                                savedUser.getUserName(),
-                                savedUser.getVerificationCode(),
-                                "USER");
-                        redirectAttributes.addFlashAttribute("success",
-                                "Registration successful! Please check your email to verify your account.");
-                    } else {
-                        redirectAttributes.addFlashAttribute("success",
-                                "Registration successful! However, we couldn't send the verification email. Please contact support.");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    redirectAttributes.addFlashAttribute("success",
-                            "Registration successful! However, we couldn't send the verification email. Please contact support.");
-                }
+                redirectAttributes.addFlashAttribute("success",
+                        "Registration successful! You can now log in with your credentials.");
                 return "redirect:/login";
             }
         } catch (Exception e) {

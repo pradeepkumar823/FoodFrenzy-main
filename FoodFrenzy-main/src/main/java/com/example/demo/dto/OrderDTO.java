@@ -10,18 +10,24 @@ public class OrderDTO {
     private String productName;
     private Integer quantity;
     private Double totalAmount;
+    private Double unitPrice;
+    private String orderDescription;
     private LocalDate orderDate;
 
-public OrderDTO() {}
+    public OrderDTO() {
+    }
 
-public static OrderDTO fromEntity(Orders order) {
-        if (order == null) return null;
-        
+    public static OrderDTO fromEntity(Orders order) {
+        if (order == null)
+            return null;
+
         OrderDTO dto = new OrderDTO();
         dto.setOrderId((long) order.getOrderId());
         dto.setProductName(order.getOrderName());
         dto.setQuantity(order.getOrderQuantity());
         dto.setTotalAmount(order.getOrderTotalAmount());
+        dto.setUnitPrice(order.getOrderPrice());
+        dto.setOrderDescription(order.getOrderDescription());
         if (order.getOrderDate() != null) {
             dto.setOrderDate(order.getOrderDate().toInstant()
                     .atZone(ZoneId.systemDefault())
@@ -39,13 +45,14 @@ public static OrderDTO fromEntity(Orders order) {
         order.setOrderName(this.productName);
         order.setOrderQuantity(this.quantity);
         order.setOrderTotalAmount(this.totalAmount);
+        order.setOrderPrice(this.unitPrice != null ? this.unitPrice : 0.0);
+        order.setOrderDescription(this.orderDescription);
         if (this.orderDate != null) {
             order.setOrderDate(java.util.Date.from(
                     this.orderDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         }
         return order;
     }
-
 
     public Long getOrderId() {
         return orderId;
@@ -85,5 +92,21 @@ public static OrderDTO fromEntity(Orders order) {
 
     public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public String getOrderDescription() {
+        return orderDescription;
+    }
+
+    public void setOrderDescription(String orderDescription) {
+        this.orderDescription = orderDescription;
     }
 }
