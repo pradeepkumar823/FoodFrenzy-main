@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 public class Orders {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int orderId;
 	@NotNull
 	private String orderName;

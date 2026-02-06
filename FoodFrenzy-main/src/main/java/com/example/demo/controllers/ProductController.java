@@ -64,7 +64,14 @@ public class ProductController {
 
 			if (product != null) {
 				model.addAttribute("product", product);
-				model.addAttribute("order", new OrderRequestDTO());
+
+				OrderRequestDTO orderRequest = new OrderRequestDTO();
+				orderRequest.setProductName(product.getProductName());
+				orderRequest.setPrice(product.getProductPrice());
+				orderRequest.setProductDescription(product.getProductDescription());
+				orderRequest.setQuantity(1); // Default quantity
+
+				model.addAttribute("order", orderRequest);
 
 				// Get user orders if logged in as CUSTOMER
 				Object userObj = session.getAttribute("loggedInUser");
@@ -94,12 +101,14 @@ public class ProductController {
 	}
 
 	@PostMapping("/product/order")
-	public String orderHandler(@ModelAttribute OrderRequestDTO orderRequest, HttpSession session, Model model) {
+	public String orderHandler(@ModelAttribute OrderRequestDTO orderRequest, HttpSession session, Model model,
+			org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
 		Object userObj = session.getAttribute("loggedInUser");
 		String role = (String) session.getAttribute("role");
 
 		if (userObj == null || !"USER".equals(role)) {
-			return "redirect:/login?error=Please login as a Customer to place orders";
+			redirectAttributes.addFlashAttribute("error", "Please login as a Customer to place orders");
+			return "redirect:/login";
 		}
 
 		User loggedInUser = (User) userObj;
@@ -120,9 +129,21 @@ public class ProductController {
 			model.addAttribute("amount", totalAmount);
 			return "Order_success";
 		} catch (Exception e) {
-			model.addAttribute("error", "Failed to create order");
-			return "BuyProduct";
+			e.printStackTrace();
+			model.addAttribute("error", "Failed to create order: " + e.getMessage());
 
+			// Re-fetch product and history to prevent empty page
+			Product product = productServices.getProductByName(orderRequest.getProductName());
+			model.addAttribute("product", product);
+			model.addAttribute("order", orderRequest);
+
+			List<OrderDTO> orders = orderServices.getOrdersByUserId(loggedInUser.getUserId())
+					.stream()
+					.map(OrderDTO::fromEntity)
+					.collect(Collectors.toList());
+			model.addAttribute("orders", orders);
+
+			return "BuyProduct";
 		}
 	}
 

@@ -12,6 +12,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.FlashMapManager;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -30,22 +34,28 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         Optional<Admin> adminOpt = adminRepository.findByAdminEmailIgnoreCase(email);
 
+        FlashMap flashMap = new FlashMap();
+        FlashMapManager flashMapManager = RequestContextUtils.getFlashMapManager(request);
+
         if (adminOpt.isPresent()) {
             Admin admin = adminOpt.get();
             admin.setVerified(true);
             admin.setVerificationCode(null);
             adminRepository.save(admin);
 
-            // Redirect to login page with success message
-            response.sendRedirect("/login?success="
-                    + java.net.URLEncoder.encode("Account verified with Google! You can now login.", "UTF-8")
-                    + "&email=" + email);
+            flashMap.put("success", "Account verified with Google! You can now login.");
+            if (flashMapManager != null) {
+                flashMapManager.saveOutputFlashMap(flashMap, request, response);
+            }
+            response.sendRedirect("/login");
         } else {
-            // Not a registered admin email
             String errorMessage = "The Google account (" + email
                     + ") is not registered as an Admin. Please register with this email on our platform first.";
-            response.sendRedirect("/login?error="
-                    + java.net.URLEncoder.encode(errorMessage, "UTF-8"));
+            flashMap.put("error", errorMessage);
+            if (flashMapManager != null) {
+                flashMapManager.saveOutputFlashMap(flashMap, request, response);
+            }
+            response.sendRedirect("/login");
         }
     }
 }

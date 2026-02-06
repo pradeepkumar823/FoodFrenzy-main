@@ -621,10 +621,11 @@ tr:hover td {
 
 /* Professional Multi-Column Footer */
 .footer-pro {
-  background: #1a1a1d;
+  background: #111114;
   color: rgba(255, 255, 255, 0.7);
   padding: 5rem 2rem 2rem;
   margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .footer-grid {
@@ -634,28 +635,57 @@ tr:hover td {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 3rem;
   text-align: left;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
 .footer-col h4 {
   color: white;
   margin-bottom: 1.5rem;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.footer-col p {
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 .footer-col ul li {
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.footer-col ul li a {
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  display: inline-block;
 }
 
 .footer-col ul li a:hover {
   color: var(--primary);
-  padding-left: 5px;
+  transform: translateX(8px);
+}
+
+.footer-col .fa-brands {
+  color: white;
+  transition: var(--transition);
+}
+
+.footer-col .fa-brands:hover {
+  color: var(--primary);
+  transform: translateY(-5px);
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 2.5rem;
   text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Testimonial Styles */
@@ -943,16 +973,4 @@ tr:hover td {
 }
 
 /* Unified Footer */
-.unified-footer {
-  background: white;
-  padding: 2rem 0;
-  margin-top: auto;
-  border-top: 1px solid #f1f2f6;
-  width: 100%;
-}
-
-.unified-footer p {
-  color: var(--text-muted);
-  font-weight: 500;
-  margin: 0;
-}
+/* Footer enhancements complete */

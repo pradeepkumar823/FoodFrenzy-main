@@ -24,9 +24,11 @@ public class AdminController {
 	private OrderServices orderServices;
 
 	@GetMapping("/services")
-	public String returnBack(HttpSession session, Model model) {
+	public String returnBack(HttpSession session, Model model,
+			org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
 		if (!"ADMIN".equals(session.getAttribute("role"))) {
-			return "redirect:/login?error=Access Denied";
+			redirectAttributes.addFlashAttribute("error", "Access Denied");
+			return "redirect:/login";
 		}
 		List<User> users = this.services.getAllUser();
 		List<Admin> admins = this.adminServices.getAll();
@@ -109,9 +111,11 @@ public class AdminController {
 	}
 
 	@GetMapping("/services/data")
-	public String adminServices(HttpSession session, Model model) {
+	public String adminServices(HttpSession session, Model model,
+			org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
 		if (!"ADMIN".equals(session.getAttribute("role"))) {
-			return "redirect:/login?error=Access Denied";
+			redirectAttributes.addFlashAttribute("error", "Access Denied");
+			return "redirect:/login";
 		}
 		try {
 			List<Product> products = productServices.getAllProducts();

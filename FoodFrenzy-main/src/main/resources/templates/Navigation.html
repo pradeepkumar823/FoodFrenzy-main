@@ -87,10 +87,47 @@
       </script>
     </nav>
 
-    <footer th:fragment="footer" class="unified-footer">
-      <div class="container text-center">
+    <footer th:fragment="footer" class="footer-pro">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 class="logo" style="color: white; margin-bottom: 1rem">
+            🍕 FoodFrenzy
+          </h4>
+          <p>
+            Delivering deliciousness since 2024. Your satisfaction is our
+            primary recipe.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a th:href="@{/home}">Home</a></li>
+            <li><a th:href="@{/products}">Menu</a></li>
+            <li><a th:href="@{/about}">About Us</a></li>
+            <li><a th:href="@{/location}">Locations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Customer Care</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Safety Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Follow Us</h4>
+          <div style="display: flex; gap: 1rem; font-size: 1.5rem">
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
         <p>
-          &copy; 2026 FoodFrenzy. Made with
+          &copy; 2026 FoodFrenzy. Crafted with
           <span style="color: var(--primary)">❤️</span> for foodies.
         </p>
       </div>

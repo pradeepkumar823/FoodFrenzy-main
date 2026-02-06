@@ -14,6 +14,12 @@
     <div th:replace="~{Navigation :: navbar}"></div>
 
     <div class="container animate-fade">
+      <div
+        th:if="${error}"
+        class="message error text-center"
+        th:text="${error}"
+      ></div>
+
       <!-- Product Order Section -->
       <div
         th:if="${product != null}"
